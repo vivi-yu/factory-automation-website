@@ -34,3 +34,9 @@ next-env.d.ts
 dev.log
 .vercel
 .env*
+
+# Local Netlify folder
+.netlify
+
+# local pnpm store
+.pnpm-store

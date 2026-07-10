@@ -1,0 +1,71 @@
+﻿# 数据库设计（V1.0 建议）
+
+## category 企业分类
+
+id
+name
+description
+sort
+status
+createdAt
+updatedAt
+
+## company 企业
+
+id
+logo
+name
+categoryId
+sort
+isFeatured
+intro
+businessTags
+serviceScope
+images
+website
+province
+city
+status
+createdAt
+updatedAt
+
+说明：不保存或不展示企业电话、微信、联系人；所有联系方式统一进入平台客服。
+
+## demand 需求
+
+id
+companyId
+title
+type
+content
+publishedAt
+sort
+status
+createdAt
+updatedAt
+
+说明：需求由管理员录入，不开放用户发布。
+
+## message 留言
+
+id
+name
+phone
+company
+content
+source
+status
+createdAt
+updatedAt
+
+状态：pending 未联系，contacted 已联系。
+
+## admin 管理员
+
+id
+username
+passwordHash
+createdAt
+updatedAt
+
+V1 不做复杂权限，仅保留管理员登录账户。

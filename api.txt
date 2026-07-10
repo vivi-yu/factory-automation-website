@@ -1,0 +1,42 @@
+采用 REST API。
+
+企业
+
+GET /api/company
+
+GET /api/company/:id
+
+POST /api/company
+
+PUT /api/company/:id
+
+DELETE /api/company/:id
+
+需求
+
+GET /api/demand
+
+GET /api/demand/:id
+
+POST /api/demand
+
+PUT /api/demand/:id
+
+DELETE /api/demand/:id
+
+留言
+
+POST /api/inquiry
+
+GET /api/inquiry
+
+PUT /api/inquiry/:id
+
+首页
+
+GET /api/home
+
+企业分类
+
+GET /api/category
+05-UI.md

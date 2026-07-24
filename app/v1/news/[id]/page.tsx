@@ -19,7 +19,7 @@ export default async function V1NewsDetailPage({ params }: { params: Promise<{ i
         <div className="mx-auto max-w-7xl px-4 md:px-6">
           <Link href="/v1/news" className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:text-accent"><ArrowLeft className="size-4" />返回资讯列表</Link>
           <div className="mt-6 flex items-center gap-2 text-sm text-muted-foreground"><CalendarDays className="size-4 text-primary" />{news.date}</div>
-          <h1 className="mt-3 max-w-4xl text-3xl font-bold md:text-4xl leading-tight">{news.title}</h1>
+          <h1 className="mt-3 max-w-4xl text-2xl font-bold leading-tight">{news.title}</h1>
           <p className="mt-4 max-w-3xl text-muted-foreground">{news.summary}</p>
         </div>
       </section>

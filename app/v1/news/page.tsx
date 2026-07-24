@@ -12,7 +12,7 @@ export default function V1NewsPage() {
       <section className="border-b border-primary/10 bg-gradient-to-br from-[#fff4f1] via-white to-[#ffe1d8] py-12">
         <div className="mx-auto max-w-7xl px-4 md:px-6">
           <Link href="/v1" className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:text-accent"><ArrowLeft className="size-4" />返回首页</Link>
-          <h1 className="mt-6 text-3xl font-bold md:text-4xl">产业观察与资讯</h1>
+          <h1 className="mt-6 text-2xl font-bold">产业观察与资讯</h1>
           <p className="mt-3 max-w-3xl text-muted-foreground">持续整理自动化、供应链、技术服务和项目对接相关动态。</p>
         </div>
       </section>

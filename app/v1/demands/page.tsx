@@ -1,6 +1,7 @@
 ﻿import Link from 'next/link'
 import { ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { V1ClickableCard } from '@/components/v1/V1ClickableCard'
 import { V1FloatingActions } from '@/components/v1/V1FloatingActions'
 import { V1Footer } from '@/components/v1/V1Footer'
 import { V1Header } from '@/components/v1/V1Header'
@@ -25,7 +26,7 @@ export default async function V1DemandsPage({ searchParams }: { searchParams: Pr
             <ArrowLeft className="size-4" />
             返回首页
           </Link>
-          <h1 className="mt-6 text-3xl font-bold md:text-4xl">最新需求动态</h1>
+          <h1 className="mt-6 text-2xl font-bold">最新需求动态</h1>
           <p className="mt-3 max-w-3xl text-muted-foreground">聚焦企业最新业务动态，展示合作需求、项目信息及行业资讯，促进产业资源高效对接。</p>
         </div>
       </section>
@@ -34,7 +35,7 @@ export default async function V1DemandsPage({ searchParams }: { searchParams: Pr
         <div className="mx-auto max-w-7xl px-4 md:px-6">
           <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
             {demands.map((demand) => (
-              <article key={demand.id} className="group rounded-lg border border-border/40 bg-card p-5 shadow-sm transition-all hover:border-primary hover:shadow-xl hover:shadow-primary/10">
+              <V1ClickableCard key={demand.id} href={`/v1/demands/${demand.id}`} className="group rounded-lg border border-border/40 bg-card p-5 shadow-sm transition-all hover:border-primary hover:shadow-xl hover:shadow-primary/10">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">{demand.type}</span>
                   <span className="text-xs text-muted-foreground">{demand.publishedAt}</span>
@@ -46,7 +47,7 @@ export default async function V1DemandsPage({ searchParams }: { searchParams: Pr
                   <Link href={`/v1/demands/${demand.id}`}><Button variant="outline" className="h-9 rounded-lg border-border/60 hover:border-primary">查看详情</Button></Link>
                   <Link href="/v1/contact"><Button className="h-9 rounded-lg bg-gradient-to-r from-primary to-accent text-white hover:opacity-90">联系客服</Button></Link>
                 </div>
-              </article>
+              </V1ClickableCard>
             ))}
           </div>
 

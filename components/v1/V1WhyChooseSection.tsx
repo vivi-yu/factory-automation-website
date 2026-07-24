@@ -17,7 +17,7 @@ export function V1WhyChooseSection() {
     <section className="bg-card py-10 md:py-12">
       <div className="mx-auto max-w-[1200px] px-4 md:px-0">
         <div className="mb-8 text-center">
-          <h2 className="text-3xl font-bold md:text-4xl text-foreground">让产业资源更容易被找到</h2>
+          <h2 className="text-2xl font-bold text-foreground">让产业资源更容易被找到</h2>
         </div>
 
         <div className="hidden gap-8 lg:flex">

@@ -27,7 +27,7 @@ export default async function V1CompanyDetailPage({ params }: { params: Promise<
             <div className="flex items-start gap-4">
               <div className="flex size-16 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-accent text-lg font-bold text-white">{company.logo}</div>
               <div>
-                <div className="flex flex-wrap items-center gap-2"><h1 className="text-3xl font-bold">{company.name}</h1>{category ? <span className="rounded-md bg-primary/10 px-2 py-1 text-xs font-medium text-primary">{category.name}</span> : null}</div>
+                <div className="flex flex-wrap items-center gap-2"><h1 className="text-2xl font-bold">{company.name}</h1>{category ? <span className="rounded-md bg-primary/10 px-2 py-1 text-xs font-medium text-primary">{category.name}</span> : null}</div>
                 <p className="mt-2 flex items-center gap-1 text-muted-foreground"><MapPin className="size-4" />{company.province} · {company.city}</p>
               </div>
             </div>

@@ -41,7 +41,7 @@ function CategoryRail({ category }: { category: V1Category }) {
     <section id={`category-${category.id}`} className="scroll-mt-28">
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h2 className="v1-section-title text-3xl font-bold text-foreground md:text-4xl">{category.name}</h2>
+          <h2 className="v1-section-title text-2xl font-bold text-foreground">{category.name}</h2>
           <p className="mt-3 max-w-3xl text-sm leading-6 text-muted-foreground">{category.description}</p>
         </div>
         <Link href={`/v1/companies?category=${category.id}`}>

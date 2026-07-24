@@ -37,6 +37,10 @@ dev.log
 
 # Local Netlify folder
 .netlify
+.netlify-*/
+
+# local development logs
+dev-*.log
 
 # local pnpm store
 .pnpm-store

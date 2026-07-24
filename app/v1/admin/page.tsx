@@ -196,7 +196,7 @@ export default function V1AdminPage() {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-5 md:px-6">
           <div>
             <p className="text-sm font-medium text-primary">V1 后台</p>
-            <h1 className="mt-1 text-2xl font-bold">PU 厂务资源平台后台</h1>
+            <h1 className="mt-1 text-2xl font-bold">友军博品后台</h1>
           </div>
           <Link href="/v1" className="rounded-lg border border-border/60 px-4 py-2 text-sm font-medium hover:border-primary">返回前台</Link>
         </div>

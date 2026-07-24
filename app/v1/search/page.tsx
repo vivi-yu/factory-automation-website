@@ -21,7 +21,7 @@ export default async function V1SearchPage({
       <section className="border-b border-slate-200 bg-white py-10">
         <div className="mx-auto max-w-7xl px-4 md:px-6">
           <p className="text-sm font-semibold text-blue-700">搜索</p>
-          <h1 className="mt-2 text-3xl font-bold">搜索结果</h1>
+          <h1 className="mt-2 text-2xl font-bold">搜索结果</h1>
           <p className="mt-2 text-slate-600">
             {query ? `关键词：${query}` : '可搜索企业名称、主营业务、需求标题、地区和关键词。'}
           </p>

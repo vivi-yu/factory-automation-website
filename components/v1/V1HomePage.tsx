@@ -1,6 +1,10 @@
-﻿import Link from 'next/link'
+'use client'
+
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { CalendarDays } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { V1BannerCarousel } from '@/components/v1/V1BannerCarousel'
 import { V1CategoryShowcase } from '@/components/v1/V1CategoryShowcase'
 import { V1FloatingActions } from '@/components/v1/V1FloatingActions'
 import { V1Footer } from '@/components/v1/V1Footer'
@@ -9,6 +13,7 @@ import { V1WhyChooseSection } from '@/components/v1/V1WhyChooseSection'
 import { getCompanyName, getLatestDemands, getVisibleCategories, v1News } from '@/lib/v1-data'
 
 export function V1HomePage() {
+  const router = useRouter()
   const categories = getVisibleCategories()
   const latestDemands = getLatestDemands(4)
   const homeNews = v1News.slice(0, 3)
@@ -17,15 +22,17 @@ export function V1HomePage() {
     <main className="min-h-screen overflow-hidden bg-card text-foreground">
       <V1Header />
 
-      <section className="bg-card pb-8 pt-0">
-        <img src="/hero-banner-new.png" alt="" className="h-auto w-full object-contain" />
+      <V1BannerCarousel />
+
+      <section className="hidden">
+        <img src="/hero-banner-new.png" alt="友军博品产业资源对接平台" className="h-auto w-full object-contain" />
       </section>
 
       <section id="demands" className="scroll-mt-24 border-y border-border/30 bg-card py-10 md:py-12">
         <div className="mx-auto max-w-[1200px] px-4 md:px-0">
           <div className="mb-7 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <h2 className="text-3xl font-bold text-foreground md:text-4xl">最新需求动态</h2>
+              <h2 className="text-2xl font-bold text-foreground">最新需求动态</h2>
               <p className="mt-3 text-muted-foreground">聚焦企业最新业务动态，展示合作需求、项目信息及行业资讯，促进产业资源高效对接</p>
             </div>
             <Link href="/v1/demands" className="text-sm font-medium text-primary hover:text-accent">查看更多需求</Link>
@@ -33,7 +40,21 @@ export function V1HomePage() {
 
           <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
             {latestDemands.map((demand) => (
-              <article key={demand.id} className="group rounded-lg border border-border/40 bg-background p-5 shadow-sm transition-all hover:border-primary hover:shadow-xl hover:shadow-primary/10">
+              <article
+                key={demand.id}
+                role="link"
+                tabIndex={0}
+                onClick={(event) => {
+                  if (!(event.target as HTMLElement).closest('a, button')) router.push(`/v1/demands/${demand.id}`)
+                }}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault()
+                    router.push(`/v1/demands/${demand.id}`)
+                  }
+                }}
+                className="group cursor-pointer rounded-lg border border-border/40 bg-background p-5 shadow-sm transition-all hover:border-primary hover:shadow-xl hover:shadow-primary/10 focus:outline-none focus:ring-2 focus:ring-primary/30"
+              >
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">{demand.type}</span>
                   <span className="text-xs text-muted-foreground">{demand.publishedAt}</span>
@@ -52,24 +73,12 @@ export function V1HomePage() {
       </section>
 
       <V1CategoryShowcase categories={categories} />
-
       <V1WhyChooseSection />
-
-      <section className="bg-card py-10 md:py-12">
-        <div className="mx-auto max-w-[1200px] px-4 md:px-0">
-          <div className="mb-6">
-            <h2 className="text-3xl font-bold text-foreground">4 步完成初步对接</h2>
-          </div>
-          <img src="/resource-flow.png" alt="合作流程：浏览企业、查看需求、提交合作意向、平台协助对接" className="h-auto w-full rounded-lg border border-border/40 object-contain shadow-sm" />
-        </div>
-      </section>
 
       <section id="news" className="bg-card py-10 md:py-12">
         <div className="mx-auto max-w-[1200px] px-4 md:px-0">
           <div className="flex items-end justify-between gap-4">
-            <div>
-              <h2 className="text-3xl font-bold text-foreground">行业资讯</h2>
-            </div>
+            <div><h2 className="text-2xl font-bold text-foreground">行业资讯</h2></div>
             <Link href="/v1/news" className="text-sm font-medium text-primary hover:text-accent">查看全部资讯</Link>
           </div>
           <div className="mt-6 grid gap-5 md:grid-cols-3">
@@ -92,8 +101,3 @@ export function V1HomePage() {
     </main>
   )
 }
-
-
-
-
-

@@ -2,9 +2,8 @@
 
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Headphones, Palette, Search } from 'lucide-react'
+import { Headphones, Search } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { useV1Theme } from '@/components/v1/V1ThemeProvider'
 
 const navItems = [
   { label: '首页', href: '/v1' },
@@ -15,7 +14,6 @@ const navItems = [
 
 export function V1Header() {
   const router = useRouter()
-  const { theme, themes, setTheme } = useV1Theme()
 
   function handleSearch(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -26,14 +24,10 @@ export function V1Header() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-primary/10 shadow-sm backdrop-blur" style={{ background: 'var(--v1-header-bg)' }}>
-      <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-3 px-4 py-3 md:gap-4 md:px-6">
+      <div className="mx-auto flex min-h-20 max-w-7xl flex-wrap items-center gap-3 px-4 py-3 md:gap-4 md:px-6">
         <Link href="/v1" className="flex shrink-0 items-center gap-3">
-          <div className="v1-logo-pulse flex size-10 items-center justify-center rounded-lg text-sm font-bold text-white shadow-lg shadow-primary/20" style={{ background: 'var(--v1-button-bg)' }}>
-            PU
-          </div>
-          <p className="v1-brand-name whitespace-nowrap bg-gradient-to-r from-primary to-accent bg-clip-text text-base font-bold text-transparent">
-            PU 厂务资源平台
-          </p>
+          <img src="/website-logo.svg" alt="友军博品" className="h-10 w-auto object-contain" />
+          <p className="v1-brand-name whitespace-nowrap text-base font-bold text-foreground">友军博品</p>
         </Link>
 
         <form onSubmit={handleSearch} className="relative order-3 min-w-0 flex-1 basis-full md:order-none md:basis-auto">
@@ -54,20 +48,6 @@ export function V1Header() {
           ))}
         </nav>
 
-        <div className="relative order-1 shrink-0 md:order-none">
-          <Palette className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-          <select
-            value={theme.id}
-            onChange={(event) => setTheme(event.target.value as typeof theme.id)}
-            aria-label="切换配色方案"
-            className="h-10 max-w-[150px] appearance-none rounded-lg border border-border/60 bg-card py-2 pl-9 pr-3 text-sm font-medium text-foreground outline-none transition hover:border-primary focus:border-primary focus:ring-2 focus:ring-primary/15"
-          >
-            {themes.map((item) => (
-              <option key={item.id} value={item.id}>{item.name}</option>
-            ))}
-          </select>
-        </div>
-
         <Link href="/v1/contact" className="hidden shrink-0 lg:block">
           <Button className="v1-contact-glow h-10 gap-2 rounded-lg px-4 text-white hover:opacity-95" style={{ background: 'var(--v1-button-bg)' }}>
             <Headphones className="size-4" />
@@ -76,9 +56,6 @@ export function V1Header() {
         </Link>
       </div>
       <style jsx>{`
-        .v1-logo-pulse {
-          animation: v1LogoBreath 3s ease-in-out infinite;
-        }
         .v1-nav-link::after {
           content: '';
           position: absolute;
@@ -101,10 +78,6 @@ export function V1Header() {
           position: relative;
           box-shadow: 0 0 0 0 color-mix(in srgb, var(--primary) 30%, transparent);
           animation: v1ContactGlow 3s ease-in-out infinite;
-        }
-        @keyframes v1LogoBreath {
-          0%, 100% { transform: scale(0.95); }
-          50% { transform: scale(1.05); }
         }
         @keyframes v1NavFlow {
           from { background-position: 0% 50%; }

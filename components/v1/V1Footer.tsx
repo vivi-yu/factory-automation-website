@@ -10,7 +10,7 @@ export function V1Footer() {
     <footer className="" style={{ background: 'var(--v1-footer-bg)', color: 'var(--v1-footer-foreground)' }}>
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 md:grid-cols-3 md:px-6">
         <div>
-          <h2 className="text-lg font-bold">PU 厂务资源平台</h2>
+          <h2 className="text-lg font-bold">友军博品</h2>
           <p className="mt-3 text-sm leading-6 text-current/70">汇聚产业链优质企业资源，快速寻找合作伙伴、供应商、技术服务与人才资源，让产业对接更高效</p>
         </div>
         <div>
@@ -28,11 +28,11 @@ export function V1Footer() {
         <div>
           <h3 className="font-semibold">联系我们</h3>
           <div className="mt-4 flex gap-4">
-            <div className="flex size-24 items-center justify-center rounded-lg border border-primary/10 bg-white/70 text-center text-xs font-semibold text-current/70">企业微信<br />二维码</div>
+            <img src="/wecom-qrcode.jpg" alt="企业微信二维码" className="size-24 rounded-lg border border-primary/10 bg-white object-cover" />
             <div className="space-y-2 text-sm text-current/70">
-              <p>客服电话：400-800-2026</p>
-              <p>邮箱：service@auto-resource.com</p>
-              <p>办公地址：上海市嘉定区工业互联网创新中心</p>
+              <p>客服电话：18915532743</p>
+              <p>邮箱：18915532743@163.com</p>
+              <p>办公地址：苏州园区汀兰巷192号 沙湖天地 A1-205B-11</p>
             </div>
           </div>
           <Link href="/v1/contact" className="mt-5 inline-block"><Button className="h-9 gap-2 rounded-lg text-white hover:opacity-90" style={{ background: 'var(--v1-button-bg)' }}><Headphones className="size-4" />联系平台客服</Button></Link>

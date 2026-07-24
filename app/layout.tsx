@@ -3,8 +3,8 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'DeepLink 自动化产业资源整合平台',
-  description: '企业目录、最新需求和平台客服人工撮合的一站式自动化产业资源平台。',
+  title: '友军博品',
+  description: '友军博品企业资源与项目需求对接平台。',
   generator: 'v0.app',
   icons: {
     icon: [

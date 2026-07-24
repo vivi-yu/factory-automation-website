@@ -32,7 +32,7 @@ export function V1CategorySection({ category }: { category: V1Category }) {
       <div className="mx-auto max-w-7xl px-4 md:px-6">
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h2 className="mt-2 text-3xl font-bold text-foreground md:text-4xl">{category.name}</h2>
+            <h2 className="mt-2 text-2xl font-bold text-foreground">{category.name}</h2>
             <p className="mt-3 max-w-2xl text-muted-foreground">{category.description}</p>
           </div>
           <Link href={`/v1/companies?category=${category.id}`}>

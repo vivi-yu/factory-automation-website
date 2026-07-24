@@ -22,7 +22,7 @@ export default async function V1DemandDetailPage({ params }: { params: Promise<{
         <div className="mx-auto max-w-[1200px] px-4 md:px-0">
           <Link href="/v1/demands" className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:text-accent"><ArrowLeft className="size-4" />返回需求列表</Link>
           <span className="mt-5 inline-block rounded-md bg-primary/10 px-2 py-1 text-xs font-medium text-primary">{demand.type}</span>
-          <h1 className="mt-3 max-w-4xl text-3xl font-bold leading-tight md:text-4xl">{demand.title}</h1>
+          <h1 className="mt-3 max-w-4xl text-2xl font-bold leading-tight">{demand.title}</h1>
           <p className="mt-3 text-muted-foreground">所属企业：{getCompanyName(demand.companyId)} · 发布时间：{demand.publishedAt}</p>
         </div>
       </section>

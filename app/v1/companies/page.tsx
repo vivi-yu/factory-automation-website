@@ -32,7 +32,7 @@ export default async function V1CompaniesPage({ searchParams }: { searchParams: 
             <ArrowLeft className="size-4" />
             返回首页
           </Link>
-          <h1 className="mt-6 text-3xl font-bold md:text-4xl">{activeCategory ? activeCategory.name : '全部企业'}</h1>
+          <h1 className="mt-6 text-2xl font-bold">{activeCategory ? activeCategory.name : '全部企业'}</h1>
           <p className="mt-3 text-muted-foreground">按企业分类查看资源，所有合作咨询统一进入平台客服。</p>
 
           <div className="mt-6 flex flex-wrap gap-2">

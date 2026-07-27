@@ -14,7 +14,7 @@ export function V1WhyChooseSection() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
 
   return (
-    <section className="bg-card py-10 md:py-12">
+    <section className="bg-card py-[30px] md:py-[38px]">
       <div className="mx-auto max-w-[1200px] px-4 md:px-0">
         <div className="mb-8 text-center">
           <h2 className="text-2xl font-bold text-foreground">让产业资源更容易被找到</h2>

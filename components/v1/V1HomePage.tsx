@@ -28,7 +28,7 @@ export function V1HomePage() {
         <img src="/hero-banner-new.png" alt="友军博品产业资源对接平台" className="h-auto w-full object-contain" />
       </section>
 
-      <section id="demands" className="scroll-mt-24 border-y border-border/30 bg-card py-10 md:py-12">
+      <section id="demands" className="scroll-mt-24 border-y border-border/30 bg-card pb-[10px] pt-[10px] md:pb-[18px] md:pt-[18px]">
         <div className="mx-auto max-w-[1200px] px-4 md:px-0">
           <div className="mb-7 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
@@ -75,7 +75,7 @@ export function V1HomePage() {
       <V1CategoryShowcase categories={categories} />
       <V1WhyChooseSection />
 
-      <section id="news" className="bg-card py-10 md:py-12">
+      <section id="news" className="bg-card pb-[30px] pt-0 md:pb-[38px] md:pt-2">
         <div className="mx-auto max-w-[1200px] px-4 md:px-0">
           <div className="flex items-end justify-between gap-4">
             <div><h2 className="text-2xl font-bold text-foreground">行业资讯</h2></div>

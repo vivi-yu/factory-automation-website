@@ -11,9 +11,9 @@ export function V1CategoryShowcase({ categories }: { categories: V1Category[] })
   if (!categories.length) return null
 
   return (
-    <section id="categories" className="v1-industrial-grid scroll-mt-24 bg-card py-10 md:py-12">
+    <section id="categories" className="v1-industrial-grid scroll-mt-24 bg-card pb-[30px] pt-0 md:pb-[38px] md:pt-2">
       <div className="mx-auto max-w-[1200px] px-4 md:px-0">
-        <div className="space-y-10">
+        <div className="space-y-5">
           {categories.map((category) => (
             <CategoryRail key={category.id} category={category} />
           ))}
@@ -55,7 +55,7 @@ function CategoryRail({ category }: { category: V1Category }) {
       <div ref={scrollerRef} className="flex snap-x gap-5 overflow-x-auto scroll-smooth pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {companies.map((company) => (
           <div key={company.id} className="min-w-[82%] snap-start sm:min-w-[46%] md:min-w-[30%] lg:min-w-[calc((100%_-_80px)/5)]">
-            <V1CompanyTile company={company} />
+            <V1CompanyTile company={company} compact />
           </div>
         ))}
       </div>

@@ -24,8 +24,8 @@ export function V1ThemeProvider({ children }: { children: React.ReactNode }) {
           --input: #f9fafb;
           --ring: #1e40af;
           --radius: 0.25rem;
-          --v1-header-bg: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(249,250,251,0.98));
-          --v1-footer-bg: linear-gradient(180deg, #ffffff, #f9fafb);
+          --v1-header-bg: #f3f4f6;
+          --v1-footer-bg: #f3f4f6;
           --v1-footer-foreground: #111827;
           --v1-section-bg: #f9fafb;
           --v1-button-bg: linear-gradient(90deg, #60a5fa, #ff6b6b);

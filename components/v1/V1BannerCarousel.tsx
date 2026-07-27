@@ -22,7 +22,7 @@ export function V1BannerCarousel() {
 
   return (
     <section className="group relative overflow-hidden bg-card" aria-label="首页横幅">
-      <div className="relative aspect-[3/1] min-h-44 w-full overflow-hidden sm:min-h-56">
+      <div className="relative h-[280px] w-full overflow-hidden">
         {slides.map((slide, index) => (
           <img
             key={slide.src}

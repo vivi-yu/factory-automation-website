@@ -1,28 +1,38 @@
 ﻿import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { V1ThemeProvider } from '@/components/v1/V1ThemeProvider'
+import { getCmsData } from '@/lib/cms/data.server'
 import './globals.css'
 
 export const dynamic = 'force-dynamic'
 
-export const metadata: Metadata = {
-  title: '友军博品',
-  description: '友军博品企业资源与项目需求对接平台。',
+export async function generateMetadata(): Promise<Metadata> {
+  const { site } = await getCmsData()
+  return {
+    title: site.seo.title,
+    description: site.seo.description,
+    keywords: site.seo.keywords.split(/[,，]/).map((item) => item.trim()).filter(Boolean),
+    icons: site.favicon ? { icon: site.favicon } : undefined,
+  }
 }
 
-export const viewport: Viewport = {
-  colorScheme: 'light',
-  themeColor: [{ media: '(prefers-color-scheme: light)', color: '#0066cc' }],
-  width: 'device-width',
-  initialScale: 1,
-  userScalable: true,
+export async function generateViewport(): Promise<Viewport> {
+  const { site } = await getCmsData()
+  return {
+    colorScheme: 'light',
+    themeColor: [{ media: '(prefers-color-scheme: light)', color: site.theme.primary }],
+    width: 'device-width',
+    initialScale: 1,
+    userScalable: true,
+  }
 }
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const { site } = await getCmsData()
   return (
     <html lang="zh-CN" className="bg-background">
       <body className="antialiased">
-        <V1ThemeProvider>{children}</V1ThemeProvider>
+        <V1ThemeProvider site={site}>{children}</V1ThemeProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>

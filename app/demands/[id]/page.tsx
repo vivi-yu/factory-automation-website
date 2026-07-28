@@ -19,7 +19,7 @@ export default async function V1DemandDetailPage({ params }: { params: Promise<{
   const relatedDemands = latestDemands(data.demands).filter((item) => item.id !== demand.id).slice(0, 3)
 
   return (
-    <main className="min-h-screen bg-[#fff8f5] text-foreground">
+    <main className="min-h-screen bg-background text-foreground">
       <V1Header />
       <section className="border-b border-primary/10 bg-gradient-to-br from-[#fff4f1] via-white to-[#ffe1d8] py-8">
         <div className="mx-auto max-w-[1200px] px-4 md:px-0">
@@ -106,4 +106,3 @@ function DemandCompanySummary({ company, category }: { company: Company; categor
     </article>
   )
 }
-

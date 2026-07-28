@@ -14,7 +14,7 @@ export default async function V1NewsDetailPage({ params }: { params: Promise<{ i
   const related = data.news.filter((item) => item.id !== news.id).slice(0, 3)
 
   return (
-    <main className="min-h-screen bg-[#fff8f5] text-foreground">
+    <main className="min-h-screen bg-background text-foreground">
       <V1Header />
       <section className="border-b border-primary/10 bg-gradient-to-br from-[#fff4f1] via-white to-[#ffe1d8] py-12">
         <div className="mx-auto max-w-7xl px-4 md:px-6">
@@ -35,7 +35,7 @@ export default async function V1NewsDetailPage({ params }: { params: Promise<{ i
           <aside className="rounded-lg border border-primary/10 bg-white p-5 shadow-sm">
             <h2 className="font-bold">相关资讯</h2>
             <div className="mt-4 space-y-3">
-              {related.map((item) => <Link key={item.id} href={`/news/${item.id}`} className="block rounded-lg bg-[#fff4f1] p-3 text-sm font-medium hover:text-primary">{item.title}</Link>)}
+              {related.map((item) => <Link key={item.id} href={`/news/${item.id}`} className="block rounded-lg bg-muted p-3 text-sm font-medium hover:text-primary">{item.title}</Link>)}
             </div>
           </aside>
         </div>

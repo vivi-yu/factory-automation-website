@@ -22,10 +22,6 @@ export async function V1HomePage() {
 
       <V1BannerCarousel slides={data.banners} />
 
-      <section className="hidden">
-        <img src="/hero-banner-new.png" alt="友军博品产业资源对接平台" className="h-auto w-full object-contain" />
-      </section>
-
       <section id="demands" className="scroll-mt-24 border-y border-border/30 bg-card pb-[10px] pt-[10px] md:pb-[18px] md:pt-[18px]">
         <div className="mx-auto max-w-[1200px] px-4 md:px-0">
           <div className="mb-7 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">

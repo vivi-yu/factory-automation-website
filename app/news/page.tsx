@@ -8,7 +8,7 @@ import { getCmsData } from '@/lib/cms/data.server'
 export default async function V1NewsPage() {
   const data = await getCmsData()
   return (
-    <main className="min-h-screen bg-[#fff8f5] text-foreground">
+    <main className="min-h-screen bg-background text-foreground">
       <V1Header />
       <section className="border-b border-primary/10 bg-gradient-to-br from-[#fff4f1] via-white to-[#ffe1d8] py-12">
         <div className="mx-auto max-w-7xl px-4 md:px-6">
@@ -36,6 +36,5 @@ export default async function V1NewsPage() {
     </main>
   )
 }
-
 
 

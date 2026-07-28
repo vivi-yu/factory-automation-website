@@ -54,7 +54,69 @@ export type Banner = {
   alt: string
 }
 
+export type SiteLink = {
+  label: string
+  href: string
+}
+
+export type SiteFeature = {
+  icon: string
+  title: string
+  description: string
+}
+
+export type SiteTheme = {
+  primary: string
+  primaryDark: string
+  accent: string
+  pageBackground: string
+  cardBackground: string
+  bodyText: string
+  border: string
+  mutedBackground: string
+  headerBackground: string
+  headerOpacity: number
+  headerText: string
+  headerHoverText: string
+  footerBackground: string
+  footerText: string
+  footerLink: string
+  fontFamily: string
+}
+
+export type SiteConfig = {
+  name: string
+  showName: boolean
+  logo: string
+  footerLogo: string
+  favicon: string
+  navigation: SiteLink[]
+  quickLinks: SiteLink[]
+  showContactButton: boolean
+  contactButtonText: string
+  footerDescription: string
+  phone: string
+  email: string
+  address: string
+  contactQr: string
+  contactBanner: string
+  contactEyebrow: string
+  contactTitle: string
+  contactDescription: string
+  contactFormTitle: string
+  contactFormDescription: string
+  homeFeaturesTitle: string
+  homeFeatures: SiteFeature[]
+  theme: SiteTheme
+  seo: {
+    title: string
+    description: string
+    keywords: string
+  }
+}
+
 export type CmsData = {
+  site: SiteConfig
   categories: Category[]
   companies: Company[]
   demands: Demand[]

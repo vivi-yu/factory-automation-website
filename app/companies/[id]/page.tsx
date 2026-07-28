@@ -20,7 +20,7 @@ export default async function V1CompanyDetailPage({ params }: { params: Promise<
   const related = relatedCompanies(data, company)
 
   return (
-    <main className="min-h-screen bg-[#fff8f5] text-foreground">
+    <main className="min-h-screen bg-background text-foreground">
       <V1Header />
       <section className="border-b border-primary/10 bg-gradient-to-br from-[#fff4f1] via-white to-[#ffe1d8] py-10">
         <div className="mx-auto max-w-7xl px-4 md:px-6">
@@ -42,11 +42,11 @@ export default async function V1CompanyDetailPage({ params }: { params: Promise<
         <div className="mx-auto grid max-w-7xl gap-6 px-4 md:px-6 lg:grid-cols-[1fr_360px]">
           <div className="space-y-6">
             <div className="rounded-lg border border-primary/10 bg-white p-6 shadow-sm"><h2 className="text-xl font-bold">企业介绍</h2><p className="mt-4 leading-8 text-muted-foreground">{company.intro}</p><div className="mt-5 flex flex-wrap gap-2">{company.businessTags.map((tag) => <span key={tag} className="rounded-md bg-primary/10 px-3 py-1 text-sm text-primary">{tag}</span>)}</div></div>
-            <div className="rounded-lg border border-primary/10 bg-white p-6 shadow-sm"><h2 className="text-xl font-bold">服务范围</h2><div className="mt-4 grid gap-3 sm:grid-cols-2">{company.serviceScope.map((item) => <div key={item} className="rounded-lg bg-[#fff4f1] p-4 text-sm font-medium text-muted-foreground">{item}</div>)}</div></div>
+            <div className="rounded-lg border border-primary/10 bg-card p-6 shadow-sm"><h2 className="text-xl font-bold">服务范围</h2><div className="mt-4 grid gap-3 sm:grid-cols-2">{company.serviceScope.map((item) => <div key={item} className="rounded-lg bg-muted p-4 text-sm font-medium text-muted-foreground">{item}</div>)}</div></div>
             {company.images.length > 0 ? <div className="rounded-lg border border-primary/10 bg-white p-6 shadow-sm"><h2 className="text-xl font-bold">企业图片</h2><div className="mt-4 grid gap-3 sm:grid-cols-3">{company.images.slice(0, 5).map((image) => <img key={image} src={image} alt="" className="h-36 w-full rounded-lg object-cover" />)}</div></div> : null}
           </div>
           <aside className="space-y-6">
-            <div className="rounded-lg border border-primary/10 bg-white p-5 shadow-sm"><h2 className="font-bold">最新需求</h2><div className="mt-3 space-y-3">{demands.length > 0 ? demands.map((demand) => <Link key={demand.id} href={`/demands/${demand.id}`} className="block rounded-lg bg-[#fff4f1] p-3 hover:bg-[#ffe9e3]"><p className="text-sm font-semibold text-foreground">{demand.title}</p><p className="mt-1 text-xs text-muted-foreground">{demand.publishedAt} · {demand.type}</p></Link>) : <p className="text-sm text-muted-foreground">暂无公开需求。</p>}</div></div>
+            <div className="rounded-lg border border-primary/10 bg-card p-5 shadow-sm"><h2 className="font-bold">最新需求</h2><div className="mt-3 space-y-3">{demands.length > 0 ? demands.map((demand) => <Link key={demand.id} href={`/demands/${demand.id}`} className="block rounded-lg bg-muted p-3 hover:bg-primary/10"><p className="text-sm font-semibold text-foreground">{demand.title}</p><p className="mt-1 text-xs text-muted-foreground">{demand.publishedAt} · {demand.type}</p></Link>) : <p className="text-sm text-muted-foreground">暂无公开需求。</p>}</div></div>
             <div className="rounded-lg border border-primary/10 bg-white p-5 shadow-sm"><h2 className="font-bold">平台对接</h2><p className="mt-2 text-sm leading-6 text-muted-foreground">企业电话、微信、联系人不直接展示。请提交留言，由平台客服确认需求后人工撮合。</p><Link href="/contact" className="mt-4 block"><Button className="h-10 w-full rounded-lg bg-gradient-to-r from-primary to-accent text-white hover:opacity-90">联系平台客服</Button></Link></div>
           </aside>
         </div>

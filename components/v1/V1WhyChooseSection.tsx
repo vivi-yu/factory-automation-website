@@ -1,28 +1,31 @@
 ﻿'use client'
 
 import { useState } from 'react'
-import { Handshake, Network, Search, Share2 } from 'lucide-react'
+import { Factory, Globe2, PackageSearch, Sparkles, Users } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
+import { useSiteConfig } from '@/components/v1/V1ThemeProvider'
 
-const features = [
-  { title: '产业资源整合', desc: '汇聚产业链上下游资源', icon: Network },
-  { title: '快速查找', desc: '按行业快速查询企业', icon: Search },
-  { title: '需求共享', desc: '及时了解企业合作需求', icon: Share2 },
-  { title: '高效对接', desc: '帮助企业建立合作机会', icon: Handshake },
-]
+const featureIcons: Record<string, LucideIcon> = {
+  factory: Factory,
+  package: PackageSearch,
+  globe: Globe2,
+  users: Users,
+}
 
 export function V1WhyChooseSection() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+  const site = useSiteConfig()
 
   return (
     <section className="bg-card py-[30px] md:py-[38px]">
       <div className="mx-auto max-w-[1200px] px-4 md:px-0">
         <div className="mb-8 text-center">
-          <h2 className="text-2xl font-bold text-foreground">让产业资源更容易被找到</h2>
+          <h2 className="text-2xl font-bold text-foreground">{site.homeFeaturesTitle}</h2>
         </div>
 
         <div className="hidden gap-8 lg:flex">
-          {features.map((feature, index) => {
-            const Icon = feature.icon
+          {site.homeFeatures.map((feature, index) => {
+            const Icon = featureIcons[feature.icon] || Sparkles
             const isHovered = hoveredIndex === index
             const isOther = hoveredIndex !== null && hoveredIndex !== index
             return (
@@ -49,7 +52,7 @@ export function V1WhyChooseSection() {
                     <Icon className="size-7" strokeWidth={1.5} />
                   </div>
                   <h3 className={`text-base font-semibold uppercase tracking-wide transition-colors duration-500 ${isHovered ? '' : 'text-foreground'}`} style={{ color: isHovered ? 'var(--v1-why-hover-foreground)' : undefined }}>{feature.title}</h3>
-                  <p className="mt-3 text-sm leading-relaxed transition-opacity duration-500" style={{ opacity: isHovered ? 1 : 0, color: isHovered ? 'var(--v1-why-hover-foreground)' : undefined }}>{feature.desc}</p>
+                  <p className="mt-3 text-sm leading-relaxed transition-opacity duration-500" style={{ opacity: isHovered ? 1 : 0, color: isHovered ? 'var(--v1-why-hover-foreground)' : undefined }}>{feature.description}</p>
                 </div>
               </div>
             )
@@ -57,8 +60,8 @@ export function V1WhyChooseSection() {
         </div>
 
         <div className="grid gap-5 sm:grid-cols-2 lg:hidden">
-          {features.map((feature, index) => {
-            const Icon = feature.icon
+          {site.homeFeatures.map((feature, index) => {
+            const Icon = featureIcons[feature.icon] || Sparkles
             const isHovered = hoveredIndex === index
             return (
               <div key={feature.title} onMouseEnter={() => setHoveredIndex(index)} onMouseLeave={() => setHoveredIndex(null)} className="v1-theme-card animate-grow overflow-hidden rounded-lg border border-border bg-card p-6 text-center shadow-sm transition " style={{ background: isHovered ? 'var(--v1-why-hover-bg)' : 'var(--card)', borderRadius: 'var(--v1-card-radius)', color: isHovered ? 'var(--v1-why-hover-foreground)' : undefined }}>
@@ -66,7 +69,7 @@ export function V1WhyChooseSection() {
                   <Icon className="size-7" strokeWidth={1.5} />
                 </div>
                 <h3 className="font-bold">{feature.title}</h3>
-                <p className="mt-2 text-sm opacity-80">{feature.desc}</p>
+                <p className="mt-2 text-sm opacity-80">{feature.description}</p>
               </div>
             )
           })}
@@ -75,7 +78,6 @@ export function V1WhyChooseSection() {
     </section>
   )
 }
-
 
 
 

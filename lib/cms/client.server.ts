@@ -24,3 +24,21 @@ export async function readItems<T>(collection: string, params: URLSearchParams):
   const body = (await response.json()) as { data?: T[] }
   return Array.isArray(body.data) ? body.data : []
 }
+
+export async function readSingleton<T>(collection: string, params: URLSearchParams): Promise<T | null> {
+  const baseUrl = process.env.DIRECTUS_URL?.replace(/\/$/, '')
+  if (!baseUrl) throw new Error('DIRECTUS_URL is not configured')
+
+  const response = await fetch(`${baseUrl}/items/${collection}?${params}`, {
+    headers: { Accept: 'application/json' },
+    next: { revalidate, tags: ['cms', `cms:${collection}`] },
+    signal: AbortSignal.timeout(10_000),
+  })
+
+  if (!response.ok) {
+    throw new Error(`Directus ${collection} read failed with ${response.status}`)
+  }
+
+  const body = (await response.json()) as { data?: T }
+  return body.data && typeof body.data === 'object' ? body.data : null
+}

@@ -1,8 +1,9 @@
 import 'server-only'
 
 import { cache } from 'react'
-import { directusAsset, readItems } from './client.server'
-import type { Banner, Category, CmsData, Company, Demand, News } from './types'
+import { directusAsset, readItems, readSingleton } from './client.server'
+import { DEFAULT_SITE_CONFIG } from './site-defaults'
+import type { Banner, Category, CmsData, Company, Demand, News, SiteConfig, SiteFeature, SiteLink } from './types'
 import { developmentFixtures } from '@/lib/dev-fixtures'
 
 type Relation<T> = T | number | string | null
@@ -44,6 +45,53 @@ type ArticleRow = {
   translations?: Array<{ title?: string; excerpt?: string; content?: string }>
 }
 type BannerRow = { id: number; image?: FileRelation }
+type SiteTranslationRow = {
+  site_name?: string
+  company_address?: string
+  quote_button_text?: string
+  default_meta_title?: string
+  default_meta_keywords?: string
+  default_meta_description?: string
+  factory_footer_description?: string
+  factory_contact_eyebrow?: string
+  factory_contact_title?: string
+  factory_contact_description?: string
+  factory_contact_form_title?: string
+  factory_contact_form_description?: string
+  factory_home_features_title?: string
+  factory_home_features?: unknown
+}
+type SiteRow = {
+  site_title?: string
+  logo?: FileRelation
+  footer_logo?: FileRelation
+  favicon?: FileRelation
+  site_name_display_enabled?: boolean
+  theme_primary?: string
+  theme_primary_dark?: string
+  theme_accent?: string
+  theme_bg_page?: string
+  theme_bg_card?: string
+  theme_text_body?: string
+  theme_border?: string
+  theme_bg_muted?: string
+  font_family?: string
+  header_background_color?: string
+  header_background_opacity?: number
+  header_text_color?: string
+  header_hover_text_color?: string
+  quote_button_enabled?: boolean
+  header_navigation_links?: unknown
+  footer_background_color?: string
+  footer_text_color?: string
+  footer_link_color?: string
+  email?: string
+  phone?: string
+  quick_links?: unknown
+  factory_contact_qr?: FileRelation
+  factory_contact_banner?: FileRelation
+  translations?: SiteTranslationRow[]
+}
 
 function fileId(value: FileRelation) {
   return typeof value === 'string' ? value : value?.id
@@ -62,6 +110,47 @@ function stringList(value: unknown): string[] {
   } catch {
     return value.split(',').map((item) => item.trim()).filter(Boolean)
   }
+}
+
+function jsonList(value: unknown): unknown[] {
+  if (Array.isArray(value)) return value
+  if (typeof value !== 'string') return []
+  try {
+    const parsed: unknown = JSON.parse(value)
+    return Array.isArray(parsed) ? parsed : []
+  } catch {
+    return []
+  }
+}
+
+function text(value: unknown, fallback: string) {
+  return typeof value === 'string' && value.trim() ? value.trim() : fallback
+}
+
+function siteLinks(value: unknown, fallback: SiteLink[]): SiteLink[] {
+  const links = jsonList(value).flatMap((item) => {
+    if (!item || typeof item !== 'object') return []
+    const row = item as Record<string, unknown>
+    if (row.enabled === false) return []
+    const href = text(row.href, '')
+    const label = text(row.label_zh, text(row.label, text(row.label_en, '')))
+    if (!href || !label || /^javascript:/i.test(href)) return []
+    return [{ label, href, sort: typeof row.sort === 'number' ? row.sort : 100 }]
+  })
+  return links.length > 0
+    ? links.sort((a, b) => a.sort - b.sort).map(({ label, href }) => ({ label, href }))
+    : fallback
+}
+
+function siteFeatures(value: unknown): SiteFeature[] {
+  return jsonList(value).flatMap((item) => {
+    if (!item || typeof item !== 'object') return []
+    const row = item as Record<string, unknown>
+    const title = text(row.title, '')
+    const description = text(row.description, '')
+    if (!title) return []
+    return [{ icon: text(row.icon, 'factory'), title, description }]
+  })
 }
 
 function textParagraphs(value?: string): string[] {
@@ -165,6 +254,82 @@ async function readBanners(): Promise<Banner[]> {
   })
 }
 
+async function readSiteConfig(): Promise<SiteConfig> {
+  const row = await readSingleton<SiteRow>('site_settings', new URLSearchParams({
+    fields: [
+      'site_title', 'logo', 'footer_logo', 'favicon', 'site_name_display_enabled',
+      'theme_primary', 'theme_primary_dark', 'theme_accent', 'theme_bg_page', 'theme_bg_card',
+      'theme_text_body', 'theme_border', 'theme_bg_muted', 'font_family',
+      'header_background_color', 'header_background_opacity', 'header_text_color',
+      'header_hover_text_color', 'quote_button_enabled', 'header_navigation_links',
+      'footer_background_color', 'footer_text_color', 'footer_link_color', 'email', 'phone',
+      'quick_links', 'factory_contact_qr', 'factory_contact_banner',
+      'translations.site_name', 'translations.company_address', 'translations.quote_button_text',
+      'translations.default_meta_title', 'translations.default_meta_keywords',
+      'translations.default_meta_description', 'translations.factory_footer_description',
+      'translations.factory_contact_eyebrow', 'translations.factory_contact_title',
+      'translations.factory_contact_description', 'translations.factory_contact_form_title',
+      'translations.factory_contact_form_description', 'translations.factory_home_features_title',
+      'translations.factory_home_features',
+    ].join(','),
+    'deep[translations][_filter][languages_code][_eq]': 'zh-CN',
+    limit: '1',
+  }))
+  if (!row) return DEFAULT_SITE_CONFIG
+
+  const defaults = DEFAULT_SITE_CONFIG
+  const translation = row.translations?.[0] || {}
+  const logo = directusAsset(fileId(row.logo)) || defaults.logo
+  const features = siteFeatures(translation.factory_home_features)
+  return {
+    name: text(translation.site_name, text(row.site_title, defaults.name)),
+    showName: row.site_name_display_enabled ?? defaults.showName,
+    logo,
+    footerLogo: directusAsset(fileId(row.footer_logo)) || logo,
+    favicon: directusAsset(fileId(row.favicon)),
+    navigation: siteLinks(row.header_navigation_links, defaults.navigation),
+    quickLinks: siteLinks(row.quick_links, defaults.quickLinks),
+    showContactButton: row.quote_button_enabled ?? defaults.showContactButton,
+    contactButtonText: text(translation.quote_button_text, defaults.contactButtonText),
+    footerDescription: text(translation.factory_footer_description, defaults.footerDescription),
+    phone: text(row.phone, defaults.phone),
+    email: text(row.email, defaults.email),
+    address: text(translation.company_address, defaults.address),
+    contactQr: directusAsset(fileId(row.factory_contact_qr)) || defaults.contactQr,
+    contactBanner: directusAsset(fileId(row.factory_contact_banner)) || defaults.contactBanner,
+    contactEyebrow: text(translation.factory_contact_eyebrow, defaults.contactEyebrow),
+    contactTitle: text(translation.factory_contact_title, defaults.contactTitle),
+    contactDescription: text(translation.factory_contact_description, defaults.contactDescription),
+    contactFormTitle: text(translation.factory_contact_form_title, defaults.contactFormTitle),
+    contactFormDescription: text(translation.factory_contact_form_description, defaults.contactFormDescription),
+    homeFeaturesTitle: text(translation.factory_home_features_title, defaults.homeFeaturesTitle),
+    homeFeatures: features.length > 0 ? features : defaults.homeFeatures,
+    theme: {
+      primary: text(row.theme_primary, defaults.theme.primary),
+      primaryDark: text(row.theme_primary_dark, defaults.theme.primaryDark),
+      accent: text(row.theme_accent, defaults.theme.accent),
+      pageBackground: text(row.theme_bg_page, defaults.theme.pageBackground),
+      cardBackground: text(row.theme_bg_card, defaults.theme.cardBackground),
+      bodyText: text(row.theme_text_body, defaults.theme.bodyText),
+      border: text(row.theme_border, defaults.theme.border),
+      mutedBackground: text(row.theme_bg_muted, defaults.theme.mutedBackground),
+      headerBackground: text(row.header_background_color, defaults.theme.headerBackground),
+      headerOpacity: Math.min(100, Math.max(0, row.header_background_opacity ?? defaults.theme.headerOpacity)),
+      headerText: text(row.header_text_color, defaults.theme.headerText),
+      headerHoverText: text(row.header_hover_text_color, defaults.theme.headerHoverText),
+      footerBackground: text(row.footer_background_color, defaults.theme.footerBackground),
+      footerText: text(row.footer_text_color, defaults.theme.footerText),
+      footerLink: text(row.footer_link_color, defaults.theme.footerLink),
+      fontFamily: text(row.font_family, defaults.theme.fontFamily),
+    },
+    seo: {
+      title: text(translation.default_meta_title, defaults.seo.title),
+      description: text(translation.default_meta_description, defaults.seo.description),
+      keywords: text(translation.default_meta_keywords, defaults.seo.keywords),
+    },
+  }
+}
+
 function fixtureData(): CmsData {
   return developmentFixtures
 }
@@ -173,14 +338,15 @@ export const getCmsData = cache(async (): Promise<CmsData> => {
   if (!process.env.DIRECTUS_URL && process.env.NODE_ENV !== 'production') return fixtureData()
 
   try {
-    const [categories, companies, demands, news, banners] = await Promise.all([
+    const [site, categories, companies, demands, news, banners] = await Promise.all([
+      readSiteConfig(),
       readCategories(),
       readCompanies(),
       readDemands(),
       readNews(),
       readBanners(),
     ])
-    return { categories, companies, demands, news, banners }
+    return { site, categories, companies, demands, news, banners }
   } catch (error) {
     if (process.env.NODE_ENV === 'production') throw error
     console.warn('[cms] Directus unavailable; using development fixtures:', error)

@@ -1,6 +1,8 @@
 import type { CmsData } from './cms/types'
+import { DEFAULT_SITE_CONFIG } from './cms/site-defaults'
 
 export const developmentFixtures: CmsData = {
+  site: DEFAULT_SITE_CONFIG,
   categories: [
     { id: 'brand-owner', name: '终端企业', description: '制造业项目方与终端应用企业。', image: '/categories-manufacturing.png', sort: 100, status: 'visible' },
     { id: 'automation', name: '自动化企业', description: '系统集成、控制、机器人与视觉服务。', image: '/categories-automation.png', sort: 200, status: 'visible' },

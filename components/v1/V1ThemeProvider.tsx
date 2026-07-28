@@ -1,43 +1,63 @@
 'use client'
 
-export function V1ThemeProvider({ children }: { children: React.ReactNode }) {
+import { createContext, useContext } from 'react'
+import type { CSSProperties } from 'react'
+import { DEFAULT_SITE_CONFIG } from '@/lib/cms/site-defaults'
+import type { SiteConfig } from '@/lib/cms/types'
+
+const SiteConfigContext = createContext<SiteConfig>(DEFAULT_SITE_CONFIG)
+
+export function useSiteConfig() {
+  return useContext(SiteConfigContext)
+}
+
+export function V1ThemeProvider({ children, site }: { children: React.ReactNode; site: SiteConfig }) {
+  const { theme } = site
+  const style = {
+    '--background': theme.pageBackground,
+    '--foreground': theme.primaryDark,
+    '--card': theme.cardBackground,
+    '--card-foreground': theme.primaryDark,
+    '--popover': theme.cardBackground,
+    '--popover-foreground': theme.primaryDark,
+    '--primary': theme.primary,
+    '--primary-foreground': '#ffffff',
+    '--secondary': theme.accent,
+    '--secondary-foreground': '#ffffff',
+    '--muted': theme.mutedBackground,
+    '--muted-foreground': theme.bodyText,
+    '--accent': theme.accent,
+    '--accent-foreground': '#ffffff',
+    '--border': theme.border,
+    '--input': theme.mutedBackground,
+    '--ring': theme.primary,
+    '--v1-header-bg': `color-mix(in srgb, ${theme.headerBackground} ${theme.headerOpacity}%, transparent)`,
+    '--v1-header-foreground': theme.headerText,
+    '--v1-header-hover': theme.headerHoverText,
+    '--v1-footer-bg': theme.footerBackground,
+    '--v1-footer-foreground': theme.footerText,
+    '--v1-footer-link': theme.footerLink,
+    '--v1-section-bg': theme.mutedBackground,
+    '--v1-button-bg': `linear-gradient(90deg, ${theme.primary}, ${theme.accent})`,
+    '--v1-card-radius': '0.25rem',
+    '--v1-why-bg': theme.cardBackground,
+    '--v1-why-hover-bg': `linear-gradient(135deg, ${theme.primaryDark}, ${theme.primary})`,
+    '--v1-why-hover-foreground': '#ffffff',
+    fontFamily: `${theme.fontFamily}, ui-sans-serif, system-ui, sans-serif`,
+  } as CSSProperties
+
   return (
-    <div data-v1-theme="business" className="min-h-screen">
-      {children}
+    <SiteConfigContext.Provider value={site}>
+      <div data-v1-theme="business" className="min-h-screen" style={style}>
+        {children}
       <style jsx global>{`
         [data-v1-theme='business'] {
-          --background: #ffffff;
-          --foreground: #111827;
-          --card: #ffffff;
-          --card-foreground: #111827;
-          --popover: #ffffff;
-          --popover-foreground: #111827;
-          --primary: #1e40af;
-          --primary-foreground: #ffffff;
-          --secondary: #60a5fa;
-          --secondary-foreground: #ffffff;
-          --muted: #f9fafb;
-          --muted-foreground: #6b7280;
-          --accent: #ff6b6b;
-          --accent-foreground: #ffffff;
-          --border: #e5e7eb;
-          --input: #f9fafb;
-          --ring: #1e40af;
           --radius: 0.25rem;
-          --v1-header-bg: #f3f4f6;
-          --v1-footer-bg: #f3f4f6;
-          --v1-footer-foreground: #111827;
-          --v1-section-bg: #f9fafb;
-          --v1-button-bg: linear-gradient(90deg, #60a5fa, #ff6b6b);
-          --v1-card-radius: 0.25rem;
-          --v1-why-bg: #ffffff;
-          --v1-why-hover-bg: linear-gradient(135deg, #1e40af, #60a5fa);
-          --v1-why-hover-foreground: #ffffff;
           background: var(--background);
           color: var(--foreground);
-          font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         }
       `}</style>
-    </div>
+      </div>
+    </SiteConfigContext.Provider>
   )
 }

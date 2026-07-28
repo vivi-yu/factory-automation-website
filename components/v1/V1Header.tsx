@@ -4,16 +4,11 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Headphones, Search } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-
-const navItems = [
-  { label: '首页', href: '/' },
-  { label: '企业', href: '/companies' },
-  { label: '需求', href: '/demands' },
-  { label: '行业资讯', href: '/news' },
-]
+import { useSiteConfig } from '@/components/v1/V1ThemeProvider'
 
 export function V1Header() {
   const router = useRouter()
+  const site = useSiteConfig()
 
   function handleSearch(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -23,11 +18,11 @@ export function V1Header() {
   }
 
   return (
-    <header className="sticky top-0 z-40 border-b border-primary/10 shadow-sm backdrop-blur" style={{ background: 'var(--v1-header-bg)' }}>
+    <header className="relative z-40 border-b border-primary/10 shadow-sm backdrop-blur md:sticky md:top-0" style={{ background: 'var(--v1-header-bg)' }}>
       <div className="mx-auto flex min-h-20 max-w-7xl flex-wrap items-center gap-3 px-4 py-3 md:gap-4 md:px-6">
         <Link href="/" className="flex shrink-0 items-center gap-3">
-          <img src="/website-logo.svg" alt="友军博品" className="h-10 w-auto object-contain" />
-          <p className="v1-brand-name whitespace-nowrap text-base font-bold text-foreground">友军博品</p>
+          <img src={site.logo} alt={site.name} className="h-10 w-auto max-w-40 object-contain" />
+          {site.showName ? <p className="v1-brand-name whitespace-nowrap text-base font-bold">{site.name}</p> : null}
         </Link>
 
         <form onSubmit={handleSearch} className="relative order-3 min-w-0 flex-1 basis-full md:order-none md:basis-auto">
@@ -41,19 +36,19 @@ export function V1Header() {
         </form>
 
         <nav className="order-2 flex w-full min-w-0 items-center gap-1 overflow-x-auto rounded-lg bg-white/35 p-1 [scrollbar-width:none] md:order-none md:w-auto [&::-webkit-scrollbar]:hidden">
-          {navItems.map((item) => (
-            <Link key={item.label} href={item.href} className="v1-nav-link relative whitespace-nowrap rounded-md px-3 py-2 text-sm font-medium text-foreground transition-colors duration-300 hover:text-primary">
+          {site.navigation.map((item) => (
+            <Link key={`${item.href}-${item.label}`} href={item.href} className="v1-nav-link relative whitespace-nowrap rounded-md px-3 py-2 text-sm font-medium transition-colors duration-300">
               {item.label}
             </Link>
           ))}
         </nav>
 
-        <Link href="/contact" className="hidden shrink-0 lg:block">
+        {site.showContactButton ? <Link href="/contact" className="hidden shrink-0 lg:block">
           <Button className="v1-contact-glow h-10 gap-2 rounded-lg px-4 text-white hover:opacity-95" style={{ background: 'var(--v1-button-bg)' }}>
             <Headphones className="size-4" />
-            联系客服
+            {site.contactButtonText}
           </Button>
-        </Link>
+        </Link> : null}
       </div>
       <style jsx>{`
         .v1-nav-link::after {
@@ -69,6 +64,12 @@ export function V1Header() {
           transform: scaleX(0);
           transform-origin: left;
           transition: transform 0.3s ease;
+        }
+        .v1-brand-name, .v1-nav-link {
+          color: var(--v1-header-foreground);
+        }
+        .v1-nav-link:hover {
+          color: var(--v1-header-hover);
         }
         .v1-nav-link:hover::after {
           transform: scaleX(1);
@@ -91,5 +92,3 @@ export function V1Header() {
     </header>
   )
 }
-
-

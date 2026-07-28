@@ -172,7 +172,7 @@ function siteLinks(value: unknown, fallback: SiteLink[]): SiteLink[] {
     const href = text(row.href, '')
     const label = text(row.label_zh, text(row.label, text(row.label_en, '')))
     if (!href || !label || /^javascript:/i.test(href)) return []
-    return [{ label, href, sort: typeof row.sort === 'number' ? row.sort : 100 }]
+    return [{ label, href, sort: typeof row.sort === 'number' ? row.sort : 1 }]
   })
   return links.length > 0
     ? links.sort((a, b) => a.sort - b.sort).map(({ label, href }) => ({ label, href }))
@@ -207,7 +207,7 @@ async function readCategories(): Promise<Category[]> {
     name: row.name,
     description: row.description || '',
     image: directusAsset(fileId(row.image)) || '/companies-network.png',
-    sort: row.sort ?? 100,
+    sort: row.sort ?? 1,
     status: 'visible',
   }))
 }
@@ -225,7 +225,7 @@ async function readCompanies(): Promise<Company[]> {
     logoImage: directusAsset(fileId(row.logo)),
     name: row.name,
     categoryId: relationValue(row.category_id, 'slug'),
-    sort: row.sort ?? 100,
+    sort: row.sort ?? 1,
     featured: Boolean(row.is_featured),
     intro: row.intro || '',
     businessTags: stringList(row.business_tags),
@@ -253,7 +253,7 @@ async function readDemands(): Promise<Demand[]> {
     type: relationValue(row.demand_type_id, 'name'),
     content: row.content || '',
     publishedAt: row.date_published?.slice(0, 10) || '',
-    sort: row.sort ?? 100,
+    sort: row.sort ?? 1,
     status: 'active',
   }))
 }

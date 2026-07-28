@@ -22,7 +22,7 @@ export function V1ThemeProvider({ children, site }: { children: React.ReactNode;
     '--popover-foreground': theme.primaryDark,
     '--primary': theme.primary,
     '--primary-foreground': '#ffffff',
-    '--secondary': theme.accent,
+    '--secondary': theme.secondary,
     '--secondary-foreground': '#ffffff',
     '--muted': theme.mutedBackground,
     '--muted-foreground': theme.bodyText,
@@ -38,10 +38,14 @@ export function V1ThemeProvider({ children, site }: { children: React.ReactNode;
     '--v1-footer-foreground': theme.footerText,
     '--v1-footer-link': theme.footerLink,
     '--v1-section-bg': theme.mutedBackground,
-    '--v1-button-bg': `linear-gradient(90deg, ${theme.primary}, ${theme.accent})`,
+    '--v1-button-bg': `linear-gradient(90deg, ${theme.secondary}, ${theme.accent})`,
+    '--v1-inner-page-bg': theme.innerPageBackground,
+    '--v1-inner-panel-bg': theme.innerPanelBackground,
+    '--v1-inner-panel-hover-bg': `color-mix(in srgb, ${theme.innerPanelBackground} 40%, ${theme.innerAccentBackground})`,
+    '--v1-inner-hero-bg': `linear-gradient(to right bottom in oklab, ${theme.innerPanelBackground}, ${theme.cardBackground}, ${theme.innerAccentBackground})`,
     '--v1-card-radius': '0.25rem',
     '--v1-why-bg': theme.cardBackground,
-    '--v1-why-hover-bg': `linear-gradient(135deg, ${theme.primaryDark}, ${theme.primary})`,
+    '--v1-why-hover-bg': `linear-gradient(135deg, ${theme.primary}, ${theme.secondary})`,
     '--v1-why-hover-foreground': '#ffffff',
     fontFamily: `${theme.fontFamily}, ui-sans-serif, system-ui, sans-serif`,
   } as CSSProperties
@@ -56,6 +60,11 @@ export function V1ThemeProvider({ children, site }: { children: React.ReactNode;
           background: var(--background);
           color: var(--foreground);
         }
+        .v1-inner-page { background: var(--v1-inner-page-bg); }
+        .v1-inner-hero { background: var(--v1-inner-hero-bg); }
+        .v1-inner-panel,
+        .v1-inner-panel-link { background: var(--v1-inner-panel-bg); }
+        .v1-inner-panel-link:hover { background: var(--v1-inner-panel-hover-bg); }
       `}</style>
       </div>
     </SiteConfigContext.Provider>

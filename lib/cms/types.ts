@@ -80,12 +80,16 @@ export type SiteFeature = {
 export type SiteTheme = {
   primary: string
   primaryDark: string
+  secondary: string
   accent: string
   pageBackground: string
   cardBackground: string
   bodyText: string
   border: string
   mutedBackground: string
+  innerPageBackground: string
+  innerPanelBackground: string
+  innerAccentBackground: string
   headerBackground: string
   headerOpacity: number
   headerText: string

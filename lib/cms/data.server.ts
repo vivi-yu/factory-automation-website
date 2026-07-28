@@ -102,12 +102,16 @@ type SiteRow = {
   site_name_display_enabled?: boolean
   theme_primary?: string
   theme_primary_dark?: string
+  theme_secondary?: string
   theme_accent?: string
   theme_bg_page?: string
   theme_bg_card?: string
   theme_text_body?: string
   theme_border?: string
   theme_bg_muted?: string
+  factory_theme_bg_page?: string
+  factory_theme_bg_panel?: string
+  factory_theme_bg_accent?: string
   font_family?: string
   header_background_color?: string
   header_background_opacity?: number
@@ -321,8 +325,9 @@ async function readSiteConfig(): Promise<SiteConfig> {
   const row = await readSingleton<SiteRow>('site_settings', new URLSearchParams({
     fields: [
       'site_title', 'logo', 'footer_logo', 'favicon', 'site_name_display_enabled',
-      'theme_primary', 'theme_primary_dark', 'theme_accent', 'theme_bg_page', 'theme_bg_card',
-      'theme_text_body', 'theme_border', 'theme_bg_muted', 'font_family',
+      'theme_primary', 'theme_primary_dark', 'theme_secondary', 'theme_accent', 'theme_bg_page', 'theme_bg_card',
+      'theme_text_body', 'theme_border', 'theme_bg_muted', 'factory_theme_bg_page',
+      'factory_theme_bg_panel', 'factory_theme_bg_accent', 'font_family',
       'header_background_color', 'header_background_opacity', 'header_text_color',
       'header_hover_text_color', 'quote_button_enabled', 'header_navigation_links',
       'footer_background_color', 'footer_text_color', 'footer_link_color', 'email', 'phone',
@@ -415,12 +420,16 @@ async function readSiteConfig(): Promise<SiteConfig> {
     theme: {
       primary: text(row.theme_primary, defaults.theme.primary),
       primaryDark: text(row.theme_primary_dark, defaults.theme.primaryDark),
+      secondary: text(row.theme_secondary, defaults.theme.secondary),
       accent: text(row.theme_accent, defaults.theme.accent),
       pageBackground: text(row.theme_bg_page, defaults.theme.pageBackground),
       cardBackground: text(row.theme_bg_card, defaults.theme.cardBackground),
       bodyText: text(row.theme_text_body, defaults.theme.bodyText),
       border: text(row.theme_border, defaults.theme.border),
       mutedBackground: text(row.theme_bg_muted, defaults.theme.mutedBackground),
+      innerPageBackground: text(row.factory_theme_bg_page, defaults.theme.innerPageBackground),
+      innerPanelBackground: text(row.factory_theme_bg_panel, defaults.theme.innerPanelBackground),
+      innerAccentBackground: text(row.factory_theme_bg_accent, defaults.theme.innerAccentBackground),
       headerBackground: text(row.header_background_color, defaults.theme.headerBackground),
       headerOpacity: Math.min(100, Math.max(0, row.header_background_opacity ?? defaults.theme.headerOpacity)),
       headerText: text(row.header_text_color, defaults.theme.headerText),

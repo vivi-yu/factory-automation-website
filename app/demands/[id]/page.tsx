@@ -30,9 +30,9 @@ export default async function V1DemandDetailPage({ params }: { params: Promise<{
   const relatedDemands = latestDemands(data.demands).filter((item) => item.id !== demand.id).slice(0, 3)
 
   return (
-    <main className="min-h-screen bg-background text-foreground">
+    <main className="v1-inner-page min-h-screen text-foreground">
       <V1Header />
-      <section className="border-b border-primary/10 bg-gradient-to-br from-[#fff4f1] via-white to-[#ffe1d8] py-8">
+      <section className="v1-inner-hero border-b border-primary/10 py-8">
         <div className="mx-auto max-w-[1200px] px-4 md:px-0">
           <Link href="/demands" className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:text-accent"><ArrowLeft className="size-4" />返回需求列表</Link>
           <span className="mt-5 inline-block rounded-md bg-primary/10 px-2 py-1 text-xs font-medium text-primary">{demand.type}</span>
@@ -43,7 +43,7 @@ export default async function V1DemandDetailPage({ params }: { params: Promise<{
 
       <section className="py-8">
         <div className="mx-auto grid max-w-[1200px] gap-6 px-4 md:px-0 lg:grid-cols-[1fr_360px]">
-          <article className="rounded-lg border border-primary/10 bg-white p-6 shadow-sm">
+          <article className="rounded-lg border border-primary/10 bg-card p-6 shadow-sm">
             <div className="flex flex-col gap-2 border-b border-border/30 pb-4 sm:flex-row sm:items-center sm:justify-between">
               <h2 className="text-xl font-bold">需求内容</h2>
               <p className="text-sm text-muted-foreground">更新时间：{demand.publishedAt}</p>
@@ -65,7 +65,7 @@ export default async function V1DemandDetailPage({ params }: { params: Promise<{
         </div>
       </section>
 
-      <section className="bg-white py-8">
+      <section className="bg-card py-8">
         <div className="mx-auto max-w-[1200px] px-4 md:px-0">
           <h2 className="mb-5 text-xl font-bold">相关需求</h2>
           <div className="grid gap-5 md:grid-cols-3">
@@ -92,7 +92,7 @@ export default async function V1DemandDetailPage({ params }: { params: Promise<{
 
 function DemandCompanySummary({ company, category }: { company: Company; category?: Category }) {
   return (
-    <article className="rounded-lg border border-primary/10 bg-white p-5 shadow-sm">
+    <article className="rounded-lg border border-primary/10 bg-card p-5 shadow-sm">
       <div className="flex items-start gap-4">
         <div className="flex size-14 shrink-0 items-center justify-center rounded-lg text-sm font-bold text-white" style={{ background: 'var(--v1-button-bg)' }}>
           {company.logo}

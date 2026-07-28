@@ -45,7 +45,7 @@ export default function V1ContactPage() {
   }
 
   return (
-    <main className="min-h-screen bg-background text-foreground">
+    <main className="v1-inner-page min-h-screen text-foreground">
       <V1Header />
       <section className="relative overflow-hidden py-16" style={{ background: 'var(--v1-button-bg)' }}>
         <img src={site.contactBanner} alt="" className="absolute inset-0 h-full w-full object-cover opacity-40" />
@@ -62,4 +62,3 @@ export default function V1ContactPage() {
 
 function Info({ icon: Icon, label, value }: { icon: typeof Phone; label: string; value: string }) { return <div className="flex gap-3"><Icon className="mt-1 size-5 text-primary" /><div><p className="text-sm text-muted-foreground">{label}</p><p className="font-semibold">{value}</p></div></div> }
 function Field({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) { return <label className="block"><span className="mb-2 block text-sm font-medium text-foreground">{label} <span className="text-primary">*</span></span>{children}{error ? <span className="mt-1 block text-sm text-red-600">{error}</span> : null}</label> }
-

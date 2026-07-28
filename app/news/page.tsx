@@ -11,9 +11,9 @@ export const generateMetadata = () => getPageMetadata('news')
 export default async function V1NewsPage() {
   const data = await getCmsData()
   return (
-    <main className="min-h-screen bg-background text-foreground">
+    <main className="v1-inner-page min-h-screen text-foreground">
       <V1Header />
-      <section className="border-b border-primary/10 bg-gradient-to-br from-[#fff4f1] via-white to-[#ffe1d8] py-12">
+      <section className="v1-inner-hero border-b border-primary/10 py-12">
         <div className="mx-auto max-w-7xl px-4 md:px-6">
           <Link href="/" className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:text-accent"><ArrowLeft className="size-4" />返回首页</Link>
           <h1 className="mt-6 text-2xl font-bold">{data.site.copy.news.title}</h1>
@@ -23,7 +23,7 @@ export default async function V1NewsPage() {
       <section className="py-12">
         <div className="mx-auto grid max-w-7xl gap-5 px-4 md:grid-cols-3 md:px-6">
           {data.news.map((item) => (
-            <Link key={item.id} href={`/news/${item.id}`} className="overflow-hidden rounded-lg border border-primary/10 bg-white shadow-sm transition hover:border-primary hover:shadow-xl hover:shadow-primary/10">
+            <Link key={item.id} href={`/news/${item.id}`} className="overflow-hidden rounded-lg border border-primary/10 bg-card shadow-sm transition hover:border-primary hover:shadow-xl hover:shadow-primary/10">
               <img src={item.image} alt="" className="h-44 w-full object-cover" />
               <div className="p-5">
                 <div className="flex items-center gap-2 text-xs text-muted-foreground"><CalendarDays className="size-4 text-primary" />{item.date}</div>
@@ -39,4 +39,3 @@ export default async function V1NewsPage() {
     </main>
   )
 }
-

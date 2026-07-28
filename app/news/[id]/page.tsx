@@ -25,9 +25,9 @@ export default async function V1NewsDetailPage({ params }: { params: Promise<{ i
   const related = data.news.filter((item) => item.id !== news.id).slice(0, 3)
 
   return (
-    <main className="min-h-screen bg-background text-foreground">
+    <main className="v1-inner-page min-h-screen text-foreground">
       <V1Header />
-      <section className="border-b border-primary/10 bg-gradient-to-br from-[#fff4f1] via-white to-[#ffe1d8] py-12">
+      <section className="v1-inner-hero border-b border-primary/10 py-12">
         <div className="mx-auto max-w-7xl px-4 md:px-6">
           <Link href="/news" className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:text-accent"><ArrowLeft className="size-4" />返回资讯列表</Link>
           <div className="mt-6 flex items-center gap-2 text-sm text-muted-foreground"><CalendarDays className="size-4 text-primary" />{news.date}</div>
@@ -37,16 +37,16 @@ export default async function V1NewsDetailPage({ params }: { params: Promise<{ i
       </section>
       <section className="py-12">
         <div className="mx-auto grid max-w-7xl gap-6 px-4 md:px-6 lg:grid-cols-[1fr_340px]">
-          <article className="rounded-lg border border-primary/10 bg-white p-6 shadow-sm">
+          <article className="rounded-lg border border-primary/10 bg-card p-6 shadow-sm">
             <img src={news.image} alt="" className="mb-6 h-auto w-full rounded-lg object-contain" />
             <div className="space-y-5 text-base leading-8 text-muted-foreground">
               {news.content.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
             </div>
           </article>
-          <aside className="rounded-lg border border-primary/10 bg-white p-5 shadow-sm">
+          <aside className="rounded-lg border border-primary/10 bg-card p-5 shadow-sm">
             <h2 className="font-bold">相关资讯</h2>
             <div className="mt-4 space-y-3">
-              {related.map((item) => <Link key={item.id} href={`/news/${item.id}`} className="block rounded-lg bg-muted p-3 text-sm font-medium hover:text-primary">{item.title}</Link>)}
+              {related.map((item) => <Link key={item.id} href={`/news/${item.id}`} className="v1-inner-panel-link block rounded-lg p-3 text-sm font-medium hover:text-primary">{item.title}</Link>)}
             </div>
           </aside>
         </div>

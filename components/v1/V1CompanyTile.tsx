@@ -1,13 +1,12 @@
 ﻿import Link from 'next/link'
 import { MapPin } from 'lucide-react'
-import { getCompanyCategory, type V1Company } from '@/lib/v1-data'
+import type { Category, Company } from '@/lib/cms/types'
 
-export function V1CompanyTile({ company, compact = false }: { company: V1Company; compact?: boolean }) {
-  const category = getCompanyCategory(company)
+export function V1CompanyTile({ company, category, compact = false }: { company: Company; category?: Category; compact?: boolean }) {
   const image = company.images[0] || category?.image || '/companies-network.png'
 
   return (
-    <Link href={`/v1/companies/${company.id}`} className="group block h-full">
+    <Link href={`/companies/${company.id}`} className="group block h-full">
       <article className="v1-theme-card h-full overflow-hidden rounded-lg border border-border/40 bg-card shadow-sm transition-all hover:-translate-y-1 hover:border-primary hover:shadow-xl hover:shadow-primary/15" style={{ borderRadius: 'var(--v1-card-radius)' }}>
         <div className="relative aspect-[4/3] overflow-hidden bg-muted">
           <img src={image} alt="" className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
@@ -30,7 +29,6 @@ export function V1CompanyTile({ company, compact = false }: { company: V1Company
     </Link>
   )
 }
-
 
 
 

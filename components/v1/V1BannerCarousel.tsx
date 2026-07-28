@@ -2,31 +2,30 @@
 
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import type { Banner } from '@/lib/cms/types'
 
-const slides = [
-  { src: '/hero-banner-1.png', alt: '友军博品产业资源对接平台横幅 1' },
-  { src: '/hero-banner-2.png', alt: '友军博品产业资源对接平台横幅 2' },
-]
-
-export function V1BannerCarousel() {
+export function V1BannerCarousel({ slides }: { slides: Banner[] }) {
   const [activeIndex, setActiveIndex] = useState(0)
 
   useEffect(() => {
+    if (slides.length < 2) return
     const timer = window.setInterval(() => setActiveIndex((index) => (index + 1) % slides.length), 5000)
     return () => window.clearInterval(timer)
-  }, [])
+  }, [slides.length])
 
   function goToSlide(index: number) {
     setActiveIndex((index + slides.length) % slides.length)
   }
+
+  if (slides.length === 0) return null
 
   return (
     <section className="group relative overflow-hidden bg-card" aria-label="首页横幅">
       <div className="relative h-[280px] w-full overflow-hidden">
         {slides.map((slide, index) => (
           <img
-            key={slide.src}
-            src={slide.src}
+            key={slide.id}
+            src={slide.image}
             alt={slide.alt}
             className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${index === activeIndex ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
           />
@@ -41,7 +40,7 @@ export function V1BannerCarousel() {
       </button>
       <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-2">
         {slides.map((slide, index) => (
-          <button key={slide.src} type="button" onClick={() => goToSlide(index)} className={`h-2 rounded-full transition-all ${index === activeIndex ? 'w-6 bg-white' : 'w-2 bg-white/60 hover:bg-white/90'}`} aria-label={`切换到第 ${index + 1} 张横幅`} aria-current={index === activeIndex} />
+          <button key={slide.id} type="button" onClick={() => goToSlide(index)} className={`h-2 rounded-full transition-all ${index === activeIndex ? 'w-6 bg-white' : 'w-2 bg-white/60 hover:bg-white/90'}`} aria-label={`切换到第 ${index + 1} 张横幅`} aria-current={index === activeIndex} />
         ))}
       </div>
     </section>

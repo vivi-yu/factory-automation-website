@@ -6,10 +6,10 @@ import { Headphones, Search } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 const navItems = [
-  { label: '首页', href: '/v1' },
-  { label: '企业', href: '/v1/companies' },
-  { label: '需求', href: '/v1/demands' },
-  { label: '行业资讯', href: '/v1/news' },
+  { label: '首页', href: '/' },
+  { label: '企业', href: '/companies' },
+  { label: '需求', href: '/demands' },
+  { label: '行业资讯', href: '/news' },
 ]
 
 export function V1Header() {
@@ -19,13 +19,13 @@ export function V1Header() {
     event.preventDefault()
     const form = new FormData(event.currentTarget)
     const query = String(form.get('q') || '').trim()
-    router.push(`/v1/search${query ? `?q=${encodeURIComponent(query)}` : ''}`)
+    router.push(`/search${query ? `?q=${encodeURIComponent(query)}` : ''}`)
   }
 
   return (
     <header className="sticky top-0 z-40 border-b border-primary/10 shadow-sm backdrop-blur" style={{ background: 'var(--v1-header-bg)' }}>
       <div className="mx-auto flex min-h-20 max-w-7xl flex-wrap items-center gap-3 px-4 py-3 md:gap-4 md:px-6">
-        <Link href="/v1" className="flex shrink-0 items-center gap-3">
+        <Link href="/" className="flex shrink-0 items-center gap-3">
           <img src="/website-logo.svg" alt="友军博品" className="h-10 w-auto object-contain" />
           <p className="v1-brand-name whitespace-nowrap text-base font-bold text-foreground">友军博品</p>
         </Link>
@@ -48,7 +48,7 @@ export function V1Header() {
           ))}
         </nav>
 
-        <Link href="/v1/contact" className="hidden shrink-0 lg:block">
+        <Link href="/contact" className="hidden shrink-0 lg:block">
           <Button className="v1-contact-glow h-10 gap-2 rounded-lg px-4 text-white hover:opacity-95" style={{ background: 'var(--v1-button-bg)' }}>
             <Headphones className="size-4" />
             联系客服

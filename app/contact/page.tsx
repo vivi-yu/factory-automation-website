@@ -1,206 +1,64 @@
-'use client'
+﻿'use client'
 
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { ChevronRight, Phone, Mail, MapPin } from 'lucide-react'
 import { useState } from 'react'
+import { CheckCircle2, Headphones, Mail, MapPin, Phone } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { V1FloatingActions } from '@/components/v1/V1FloatingActions'
+import { V1Footer } from '@/components/v1/V1Footer'
+import { V1Header } from '@/components/v1/V1Header'
 
-export default function ContactPage() {
-  const [formData, setFormData] = useState({
-    name: '',
-    phone: '',
-    company: '',
-    message: ''
-  })
+type FormState = { name: string; phone: string; company: string; message: string; website: string }
+const initialForm: FormState = { name: '', phone: '', company: '', message: '', website: '' }
+
+export default function V1ContactPage() {
+  const [form, setForm] = useState(initialForm)
+  const [errors, setErrors] = useState<Partial<FormState>>({})
   const [submitted, setSubmitted] = useState(false)
+  const [submitError, setSubmitError] = useState('')
+  const [submitting, setSubmitting] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    setSubmitted(true)
-    setTimeout(() => {
-      setSubmitted(false)
-      setFormData({ name: '', phone: '', company: '', message: '' })
-    }, 2000)
+  function updateField(field: keyof FormState, value: string) { setForm((current) => ({ ...current, [field]: value })); setErrors((current) => ({ ...current, [field]: undefined })) }
+  function validate() { const nextErrors: Partial<FormState> = {}; if (!form.name.trim()) nextErrors.name = '请输入姓名'; if (!/^1\d{10}$|^0\d{2,3}-?\d{7,8}$|^400-?\d{3}-?\d{4}$/.test(form.phone.trim())) nextErrors.phone = '请输入有效联系电话'; if (!form.company.trim()) nextErrors.company = '请输入公司名称'; if (form.message.trim().length < 10) nextErrors.message = '留言内容至少 10 个字'; setErrors(nextErrors); return Object.keys(nextErrors).length === 0 }
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    setSubmitted(false)
+    setSubmitError('')
+    if (!validate()) return
+    setSubmitting(true)
+    try {
+      const response = await fetch('/api/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: form.name, phone: form.phone, companyName: form.company, content: form.message, website: form.website, sourcePage: window.location.pathname }),
+      })
+      const result = await response.json() as { error?: string }
+      if (!response.ok) throw new Error(result.error || '留言提交失败，请稍后再试。')
+      setSubmitted(true)
+      setForm(initialForm)
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : '留言提交失败，请稍后再试。')
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border sticky top-0 z-40 bg-background/95">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-primary-foreground font-bold">
-              C
-            </div>
-            <span className="font-bold text-lg text-foreground">厂务自动化</span>
-          </Link>
-          <Button className="rounded-full">联系客服</Button>
-        </div>
-      </header>
-
-      {/* Breadcrumb */}
-      <div className="border-b border-border">
-        <div className="container mx-auto px-4 py-3 flex items-center gap-2 text-sm">
-          <Link href="/" className="text-primary hover:underline">首页</Link>
-          <ChevronRight className="w-4 h-4 text-muted-foreground" />
-          <span className="text-foreground">联系我们</span>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <section className="py-12 md:py-16">
-        <div className="container mx-auto px-4">
-          <h1 className="text-3xl md:text-4xl font-bold text-foreground text-center mb-12">
-            联系我们
-          </h1>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            {/* Left - Contact Info */}
-            <div className="space-y-8">
-              <div>
-                <h2 className="text-2xl font-bold text-foreground mb-6">联系方式</h2>
-                
-                {/* QR Code Section */}
-                <div className="border border-border rounded-lg p-8 bg-card mb-6">
-                  <p className="text-sm text-muted-foreground mb-4">企业微信</p>
-                  <div className="w-40 h-40 bg-secondary rounded-lg mx-auto flex items-center justify-center mb-4 text-muted-foreground text-sm">
-                    二维码
-                  </div>
-                  <p className="text-center text-sm text-muted-foreground">
-                    扫描二维码添加企业微信客服
-                  </p>
-                </div>
-              </div>
-
-              {/* Contact Details */}
-              <div className="space-y-4">
-                <div className="flex gap-4 items-start">
-                  <Phone className="w-5 h-5 text-primary mt-1 flex-shrink-0" />
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">客服电话</p>
-                    <p className="font-medium text-foreground">400-XXX-XXXX</p>
-                  </div>
-                </div>
-
-                <div className="flex gap-4 items-start">
-                  <Mail className="w-5 h-5 text-primary mt-1 flex-shrink-0" />
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">企业邮箱</p>
-                    <a href="mailto:service@example.com" className="text-primary hover:underline">
-                      service@example.com
-                    </a>
-                  </div>
-                </div>
-
-                <div className="flex gap-4 items-start">
-                  <MapPin className="w-5 h-5 text-primary mt-1 flex-shrink-0" />
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">公司地址</p>
-                    <p className="text-foreground">
-                      北京市朝阳区<br />
-                      XXX大厦 XX层
-                    </p>
-                  </div>
-                </div>
-
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">工作时间</p>
-                  <p className="text-foreground">
-                    周一至周五：9:00-17:00<br />
-                    周六日及节假日：休息
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Right - Contact Form */}
-            <div>
-              <div className="border border-border rounded-lg p-8 bg-card">
-                <h2 className="text-2xl font-bold text-foreground mb-6">在线留言</h2>
-
-                {!submitted ? (
-                  <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                      <label className="text-sm font-medium text-foreground block mb-2">
-                        姓名 <span className="text-destructive">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={formData.name}
-                        onChange={(e) => setFormData({...formData, name: e.target.value})}
-                        placeholder="请输入您的姓名"
-                        className="w-full px-4 py-2 rounded border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="text-sm font-medium text-foreground block mb-2">
-                        电话 <span className="text-destructive">*</span>
-                      </label>
-                      <input
-                        type="tel"
-                        required
-                        value={formData.phone}
-                        onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                        placeholder="请输入您的电话"
-                        className="w-full px-4 py-2 rounded border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="text-sm font-medium text-foreground block mb-2">
-                        公司名称 <span className="text-destructive">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={formData.company}
-                        onChange={(e) => setFormData({...formData, company: e.target.value})}
-                        placeholder="请输入您的公司名称"
-                        className="w-full px-4 py-2 rounded border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="text-sm font-medium text-foreground block mb-2">
-                        留言内容 <span className="text-destructive">*</span>
-                      </label>
-                      <textarea
-                        required
-                        value={formData.message}
-                        onChange={(e) => setFormData({...formData, message: e.target.value})}
-                        placeholder="请输入您的留言内容"
-                        rows={5}
-                        className="w-full px-4 py-2 rounded border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary resize-none"
-                      />
-                    </div>
-
-                    <Button type="submit" size="lg" className="w-full rounded-full">
-                      提交
-                    </Button>
-                  </form>
-                ) : (
-                  <div className="text-center py-12">
-                    <div className="text-5xl mb-4">✓</div>
-                    <h3 className="text-xl font-bold text-foreground mb-2">提交成功</h3>
-                    <p className="text-muted-foreground">
-                      感谢您的留言，我们会尽快与您联系
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
+    <main className="min-h-screen bg-[#fff8f5] text-foreground">
+      <V1Header />
+      <section className="relative overflow-hidden py-16" style={{ background: 'var(--v1-button-bg)' }}>
+        <img src="/contact-banner.png" alt="" className="absolute inset-0 h-full w-full object-cover opacity-40" />
+        <div className="relative mx-auto max-w-7xl px-4 md:px-6"><p className="text-sm font-semibold text-white/90">联系我们</p><h1 className="mt-3 text-2xl font-bold text-white">统一进入平台客服</h1><p className="mt-4 max-w-2xl leading-7 text-white/90">合作咨询、资源入驻、项目需求和供应商对接全部提交为留言，由平台客服人工跟进。</p></div>
       </section>
-
-      {/* Footer */}
-      <footer className="bg-muted py-8 border-t border-border mt-12">
-        <div className="container mx-auto px-4 text-center text-muted-foreground text-sm">
-          <p>© 2024 厂务自动化 版权所有 | ICP备案号：xxx</p>
-        </div>
-      </footer>
-    </div>
+      <section className="py-10"><div className="mx-auto grid max-w-7xl gap-6 px-4 md:px-6 lg:grid-cols-[420px_1fr]">
+        <aside className="space-y-5"><div className="rounded-lg border border-primary/10 bg-white p-6 shadow-sm"><p className="text-sm font-semibold text-primary">企业微信客服</p><img src="/wecom-qrcode.jpg" alt="企业微信二维码" className="mt-4 size-44 rounded-lg border border-border object-cover" /></div><div className="rounded-lg border border-primary/10 bg-white p-6 shadow-sm"><div className="space-y-5"><Info icon={Phone} label="客服电话" value="18915532743" /><Info icon={Mail} label="邮箱" value="18915532743@163.com" /><Info icon={MapPin} label="办公地址" value="苏州园区汀兰巷192号 沙湖天地 A1-205B-11" /></div></div></aside>
+        <div className="rounded-lg border border-primary/10 bg-white p-6 shadow-sm"><h2 className="text-2xl font-bold">提交留言</h2><p className="mt-2 text-sm text-muted-foreground">留言会进入后台留言管理，客服将根据内容进行跟进。</p>{submitted ? <div className="mt-6 rounded-lg border border-green-200 bg-green-50 p-5 text-green-800"><div className="flex items-center gap-2 font-semibold"><CheckCircle2 className="size-5" />留言已提交</div><p className="mt-2 text-sm">平台客服会根据留言内容进行后续联系。</p></div> : null}{submitError ? <div className="mt-6 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700" role="alert">{submitError}</div> : null}<form onSubmit={handleSubmit} className="mt-6 grid gap-4"><div className="hidden" aria-hidden="true"><label>网站<input tabIndex={-1} autoComplete="off" value={form.website} onChange={(event) => updateField('website', event.target.value)} /></label></div><Field label="姓名" error={errors.name}><input value={form.name} onChange={(event) => updateField('name', event.target.value)} className="h-11 w-full rounded-lg border border-border px-3 outline-none focus:border-primary focus:ring-3 focus:ring-primary/10" placeholder="请输入姓名" /></Field><Field label="手机" error={errors.phone}><input value={form.phone} onChange={(event) => updateField('phone', event.target.value)} className="h-11 w-full rounded-lg border border-border px-3 outline-none focus:border-primary focus:ring-3 focus:ring-primary/10" placeholder="请输入联系电话" /></Field><Field label="公司" error={errors.company}><input value={form.company} onChange={(event) => updateField('company', event.target.value)} className="h-11 w-full rounded-lg border border-border px-3 outline-none focus:border-primary focus:ring-3 focus:ring-primary/10" placeholder="请输入公司名称" /></Field><Field label="留言内容" error={errors.message}><textarea value={form.message} onChange={(event) => updateField('message', event.target.value)} rows={5} className="w-full resize-none rounded-lg border border-border px-3 py-3 outline-none focus:border-primary focus:ring-3 focus:ring-primary/10" placeholder="请描述希望对接的企业、供应商、人力、配套资源或项目需求" /></Field><Button type="submit" disabled={submitting} className="h-11 gap-2 rounded-lg text-white hover:opacity-90" style={{ background: 'var(--v1-button-bg)' }}><Headphones className="size-4" />{submitting ? '正在提交...' : '提交留言'}</Button></form></div>
+      </div></section>
+      <V1Footer /><V1FloatingActions />
+    </main>
   )
 }
+
+function Info({ icon: Icon, label, value }: { icon: typeof Phone; label: string; value: string }) { return <div className="flex gap-3"><Icon className="mt-1 size-5 text-primary" /><div><p className="text-sm text-muted-foreground">{label}</p><p className="font-semibold">{value}</p></div></div> }
+function Field({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) { return <label className="block"><span className="mb-2 block text-sm font-medium text-foreground">{label} <span className="text-primary">*</span></span>{children}{error ? <span className="mt-1 block text-sm text-red-600">{error}</span> : null}</label> }
+
+

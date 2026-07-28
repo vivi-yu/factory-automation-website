@@ -5,9 +5,9 @@ import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { V1CompanyTile } from '@/components/v1/V1CompanyTile'
-import { getRecommendedCompanies, type V1Category } from '@/lib/v1-data'
+import type { Category, Company } from '@/lib/cms/types'
 
-export function V1CategoryShowcase({ categories }: { categories: V1Category[] }) {
+export function V1CategoryShowcase({ categories, companies }: { categories: Category[]; companies: Company[] }) {
   if (!categories.length) return null
 
   return (
@@ -15,7 +15,7 @@ export function V1CategoryShowcase({ categories }: { categories: V1Category[] })
       <div className="mx-auto max-w-[1200px] px-4 md:px-0">
         <div className="space-y-5">
           {categories.map((category) => (
-            <CategoryRail key={category.id} category={category} />
+            <CategoryRail key={category.id} category={category} companies={companies.filter((company) => company.categoryId === category.id && company.featured).slice(0, 8)} />
           ))}
         </div>
       </div>
@@ -23,9 +23,8 @@ export function V1CategoryShowcase({ categories }: { categories: V1Category[] })
   )
 }
 
-function CategoryRail({ category }: { category: V1Category }) {
+function CategoryRail({ category, companies }: { category: Category; companies: Company[] }) {
   const scrollerRef = useRef<HTMLDivElement>(null)
-  const companies = getRecommendedCompanies(category.id, 8)
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -44,7 +43,7 @@ function CategoryRail({ category }: { category: V1Category }) {
           <h2 className="v1-section-title text-2xl font-bold text-foreground">{category.name}</h2>
           <p className="mt-3 max-w-3xl text-sm leading-6 text-muted-foreground">{category.description}</p>
         </div>
-        <Link href={`/v1/companies?category=${category.id}`}>
+        <Link href={`/companies?category=${category.id}`}>
           <Button variant="outline" className="gap-2 rounded-lg border-border/60 bg-white hover:border-primary hover:bg-white">
             查看更多
             <ChevronRight className="size-4" />
@@ -54,14 +53,12 @@ function CategoryRail({ category }: { category: V1Category }) {
 
       <div ref={scrollerRef} className="flex snap-x gap-5 overflow-x-auto scroll-smooth pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {companies.map((company) => (
-          <div key={company.id} className="min-w-[82%] snap-start sm:min-w-[46%] md:min-w-[30%] lg:min-w-[calc((100%_-_80px)/5)]">
-            <V1CompanyTile company={company} compact />
+          <div key={company.id} className="w-[82%] flex-none snap-start sm:w-[46%] md:w-[30%] lg:w-[calc((100%_-_80px)/5)]">
+            <V1CompanyTile company={company} category={category} compact />
           </div>
         ))}
       </div>
     </section>
   )
 }
-
-
 

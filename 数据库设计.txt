@@ -1,71 +1,35 @@
-﻿# 数据库设计（V1.0 建议）
+# Factory Automation Directus 数据模型
 
-## category 企业分类
+本文件是业务字段速查；可执行定义以 `hexia-admin/scripts/factory-automation-schema.mjs` 为准。
 
-id
-name
-description
-sort
-status
-createdAt
-updatedAt
+## Factory 专用集合
 
-## company 企业
+- `factory_categories`：企业分类，使用稳定 `slug` 作为前端路径/筛选键。
+- `factory_companies`：企业资料、所属分类、主营标签、服务范围、地区、Logo 与发布状态。
+- `factory_company_images`：企业与 `directus_files` 的图片关联及排序。
+- `factory_demand_types`：后台可维护的需求类型。
+- `factory_demands`：管理员录入的公开需求，关联企业和需求类型。
+- `factory_messages`：访客留言、来源页面、关联企业/需求及客服跟进状态。
 
-id
-logo
-name
-categoryId
-sort
-isFeatured
-intro
-businessTags
-serviceScope
-images
-website
-province
-city
-status
-createdAt
-updatedAt
+Factory 集合统一使用 `factory_` 前缀，避免与电商站点 schema 冲突。企业与需求的正式路由使用 `slug`，不暴露 Directus 数字 ID。
 
-说明：不保存或不展示企业电话、微信、联系人；所有联系方式统一进入平台客服。
+## 复用集合
 
-## demand 需求
+- `articles` / `articles_translations`：行业资讯，中文站读取 `zh-CN`。
+- `banners`：首页轮播。
+- `site_settings` / `site_settings_translations`：站点联系方式与品牌配置。
+- `seo_pages`：页面 SEO。
+- `directus_files`：上传资源。
 
-id
-companyId
-title
-type
-content
-publishedAt
-sort
-status
-createdAt
-updatedAt
+## 权限边界
 
-说明：需求由管理员录入，不开放用户发布。
+- Public 角色只能读取 `published` 的企业、分类、需求及字段白名单。
+- Public 角色没有 `factory_messages` 的创建或读取权限。
+- 留言由 Next.js 服务端 API 使用受限 Directus token 创建，状态固定为 `pending`。
+- 不展示企业电话、微信和联系人；所有联系方式统一进入平台客服。
+- 需求只允许管理员在 Directus 中录入，不开放访客发布。
 
-## message 留言
+## 状态
 
-id
-name
-phone
-company
-content
-source
-status
-createdAt
-updatedAt
-
-状态：pending 未联系，contacted 已联系。
-
-## admin 管理员
-
-id
-username
-passwordHash
-createdAt
-updatedAt
-
-V1 不做复杂权限，仅保留管理员登录账户。
+- 内容：`published`、`draft`、`offline`。
+- 留言：`pending`、`contacted`、`closed`。

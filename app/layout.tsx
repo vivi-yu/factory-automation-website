@@ -1,5 +1,4 @@
-﻿import { Analytics } from '@vercel/analytics/next'
-import type { Metadata, Viewport } from 'next'
+﻿import type { Metadata, Viewport } from 'next'
 import { V1ThemeProvider } from '@/components/v1/V1ThemeProvider'
 import { getCmsData } from '@/lib/cms/data.server'
 import './globals.css'
@@ -33,7 +32,6 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     <html lang="zh-CN" className="bg-background">
       <body className="antialiased">
         <V1ThemeProvider site={site}>{children}</V1ThemeProvider>
-        {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
   )

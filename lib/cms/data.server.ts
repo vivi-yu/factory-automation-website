@@ -3,7 +3,7 @@ import 'server-only'
 import { cache } from 'react'
 import { directusAsset, readItems, readSingleton } from './client.server'
 import { DEFAULT_SITE_CONFIG } from './site-defaults'
-import type { Banner, Category, CmsData, Company, Demand, News, SiteConfig, SiteFeature, SiteLink } from './types'
+import type { Banner, Category, CmsData, Company, Demand, News, PageSeoKey, SeoConfig, SiteConfig, SiteFeature, SiteLink } from './types'
 import { developmentFixtures } from '@/lib/dev-fixtures'
 
 type Relation<T> = T | number | string | null
@@ -44,7 +44,19 @@ type ArticleRow = {
   date_published?: string
   translations?: Array<{ title?: string; excerpt?: string; content?: string }>
 }
-type BannerRow = { id: number; image?: FileRelation }
+type BannerRow = {
+  id: number
+  image?: FileRelation
+  factory_alt_text?: string
+  factory_title?: string
+  factory_description?: string
+  factory_link_label?: string
+  factory_link_url?: string
+}
+type SeoPageRow = {
+  page_key: string
+  translations?: Array<{ title?: string; keywords?: string; description?: string }>
+}
 type SiteTranslationRow = {
   site_name?: string
   company_address?: string
@@ -60,6 +72,27 @@ type SiteTranslationRow = {
   factory_contact_form_description?: string
   factory_home_features_title?: string
   factory_home_features?: unknown
+  factory_home_demands_title?: string
+  factory_home_demands_description?: string
+  factory_home_demands_link_text?: string
+  factory_home_news_title?: string
+  factory_home_news_link_text?: string
+  factory_companies_title?: string
+  factory_companies_description?: string
+  factory_companies_all_label?: string
+  factory_demands_title?: string
+  factory_demands_description?: string
+  factory_news_title?: string
+  factory_news_description?: string
+  factory_search_eyebrow?: string
+  factory_search_title?: string
+  factory_search_description?: string
+  factory_search_companies_title?: string
+  factory_search_demands_title?: string
+  factory_search_companies_empty?: string
+  factory_search_demands_empty?: string
+  factory_company_match_title?: string
+  factory_company_match_description?: string
 }
 type SiteRow = {
   site_title?: string
@@ -244,14 +277,44 @@ async function readNews(): Promise<News[]> {
 
 async function readBanners(): Promise<Banner[]> {
   const rows = await readItems<BannerRow>('banners', new URLSearchParams({
-    fields: 'id,image',
+    fields: 'id,image,factory_alt_text,factory_title,factory_description,factory_link_label,factory_link_url',
     sort: 'sort',
     limit: '-1',
   }))
   return rows.flatMap((row) => {
     const image = directusAsset(fileId(row.image))
-    return image ? [{ id: String(row.id), image, alt: '产业资源对接平台横幅' }] : []
+    const linkUrl = text(row.factory_link_url, '')
+    return image ? [{
+      id: String(row.id),
+      image,
+      alt: text(row.factory_alt_text, '产业资源对接平台横幅'),
+      title: text(row.factory_title, ''),
+      description: text(row.factory_description, ''),
+      linkLabel: text(row.factory_link_label, ''),
+      linkUrl: /^javascript:/i.test(linkUrl) ? '' : linkUrl,
+    }] : []
   })
+}
+
+async function readPageSeo(): Promise<Partial<Record<PageSeoKey, SeoConfig>>> {
+  const rows = await readItems<SeoPageRow>('seo_pages', new URLSearchParams({
+    fields: 'page_key,translations.title,translations.keywords,translations.description',
+    'deep[translations][_filter][languages_code][_eq]': 'zh-CN',
+    limit: '-1',
+  }))
+  const keys = new Set<PageSeoKey>(['home', 'companies', 'demands', 'news', 'contact', 'search'])
+  const result: Partial<Record<PageSeoKey, SeoConfig>> = {}
+  for (const row of rows) {
+    if (!keys.has(row.page_key as PageSeoKey)) continue
+    const translation = row.translations?.[0]
+    if (!translation?.title) continue
+    result[row.page_key as PageSeoKey] = {
+      title: translation.title,
+      description: translation.description || '',
+      keywords: translation.keywords || '',
+    }
+  }
+  return result
 }
 
 async function readSiteConfig(): Promise<SiteConfig> {
@@ -270,7 +333,17 @@ async function readSiteConfig(): Promise<SiteConfig> {
       'translations.factory_contact_eyebrow', 'translations.factory_contact_title',
       'translations.factory_contact_description', 'translations.factory_contact_form_title',
       'translations.factory_contact_form_description', 'translations.factory_home_features_title',
-      'translations.factory_home_features',
+      'translations.factory_home_features', 'translations.factory_home_demands_title',
+      'translations.factory_home_demands_description', 'translations.factory_home_demands_link_text',
+      'translations.factory_home_news_title', 'translations.factory_home_news_link_text',
+      'translations.factory_companies_title', 'translations.factory_companies_description',
+      'translations.factory_companies_all_label', 'translations.factory_demands_title',
+      'translations.factory_demands_description', 'translations.factory_news_title',
+      'translations.factory_news_description', 'translations.factory_search_eyebrow',
+      'translations.factory_search_title', 'translations.factory_search_description',
+      'translations.factory_search_companies_title', 'translations.factory_search_demands_title',
+      'translations.factory_search_companies_empty', 'translations.factory_search_demands_empty',
+      'translations.factory_company_match_title', 'translations.factory_company_match_description',
     ].join(','),
     'deep[translations][_filter][languages_code][_eq]': 'zh-CN',
     limit: '1',
@@ -304,6 +377,41 @@ async function readSiteConfig(): Promise<SiteConfig> {
     contactFormDescription: text(translation.factory_contact_form_description, defaults.contactFormDescription),
     homeFeaturesTitle: text(translation.factory_home_features_title, defaults.homeFeaturesTitle),
     homeFeatures: features.length > 0 ? features : defaults.homeFeatures,
+    copy: {
+      home: {
+        demandsTitle: text(translation.factory_home_demands_title, defaults.copy.home.demandsTitle),
+        demandsDescription: text(translation.factory_home_demands_description, defaults.copy.home.demandsDescription),
+        demandsLinkText: text(translation.factory_home_demands_link_text, defaults.copy.home.demandsLinkText),
+        newsTitle: text(translation.factory_home_news_title, defaults.copy.home.newsTitle),
+        newsLinkText: text(translation.factory_home_news_link_text, defaults.copy.home.newsLinkText),
+      },
+      companies: {
+        title: text(translation.factory_companies_title, defaults.copy.companies.title),
+        description: text(translation.factory_companies_description, defaults.copy.companies.description),
+        allLabel: text(translation.factory_companies_all_label, defaults.copy.companies.allLabel),
+      },
+      demands: {
+        title: text(translation.factory_demands_title, defaults.copy.demands.title),
+        description: text(translation.factory_demands_description, defaults.copy.demands.description),
+      },
+      news: {
+        title: text(translation.factory_news_title, defaults.copy.news.title),
+        description: text(translation.factory_news_description, defaults.copy.news.description),
+      },
+      search: {
+        eyebrow: text(translation.factory_search_eyebrow, defaults.copy.search.eyebrow),
+        title: text(translation.factory_search_title, defaults.copy.search.title),
+        description: text(translation.factory_search_description, defaults.copy.search.description),
+        companiesTitle: text(translation.factory_search_companies_title, defaults.copy.search.companiesTitle),
+        demandsTitle: text(translation.factory_search_demands_title, defaults.copy.search.demandsTitle),
+        companiesEmpty: text(translation.factory_search_companies_empty, defaults.copy.search.companiesEmpty),
+        demandsEmpty: text(translation.factory_search_demands_empty, defaults.copy.search.demandsEmpty),
+      },
+      companyDetail: {
+        matchTitle: text(translation.factory_company_match_title, defaults.copy.companyDetail.matchTitle),
+        matchDescription: text(translation.factory_company_match_description, defaults.copy.companyDetail.matchDescription),
+      },
+    },
     theme: {
       primary: text(row.theme_primary, defaults.theme.primary),
       primaryDark: text(row.theme_primary_dark, defaults.theme.primaryDark),
@@ -338,15 +446,16 @@ export const getCmsData = cache(async (): Promise<CmsData> => {
   if (!process.env.DIRECTUS_URL && process.env.NODE_ENV !== 'production') return fixtureData()
 
   try {
-    const [site, categories, companies, demands, news, banners] = await Promise.all([
+    const [site, pageSeo, categories, companies, demands, news, banners] = await Promise.all([
       readSiteConfig(),
+      readPageSeo(),
       readCategories(),
       readCompanies(),
       readDemands(),
       readNews(),
       readBanners(),
     ])
-    return { site, categories, companies, demands, news, banners }
+    return { site, pageSeo, categories, companies, demands, news, banners }
   } catch (error) {
     if (process.env.NODE_ENV === 'production') throw error
     console.warn('[cms] Directus unavailable; using development fixtures:', error)

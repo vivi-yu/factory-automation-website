@@ -5,6 +5,17 @@ import { V1FloatingActions } from '@/components/v1/V1FloatingActions'
 import { V1Footer } from '@/components/v1/V1Footer'
 import { V1Header } from '@/components/v1/V1Header'
 import { getCmsData } from '@/lib/cms/data.server'
+import { getPageMetadata } from '@/lib/cms/metadata.server'
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const data = await getCmsData()
+  const news = data.news.find((item) => item.id === id)
+  return getPageMetadata('news', news ? {
+    title: `${news.title} | ${data.site.name}`,
+    description: news.summary,
+  } : {})
+}
 
 export default async function V1NewsDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params

@@ -26,10 +26,10 @@ export async function V1HomePage() {
         <div className="mx-auto max-w-[1200px] px-4 md:px-0">
           <div className="mb-7 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <h2 className="text-2xl font-bold text-foreground">最新需求动态</h2>
-              <p className="mt-3 text-muted-foreground">聚焦企业最新业务动态，展示合作需求、项目信息及行业资讯，促进产业资源高效对接</p>
+              <h2 className="text-2xl font-bold text-foreground">{data.site.copy.home.demandsTitle}</h2>
+              <p className="mt-3 text-muted-foreground">{data.site.copy.home.demandsDescription}</p>
             </div>
-            <Link href="/demands" className="text-sm font-medium text-primary hover:text-accent">查看更多需求</Link>
+            <Link href="/demands" className="text-sm font-medium text-primary hover:text-accent">{data.site.copy.home.demandsLinkText}</Link>
           </div>
 
           <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
@@ -62,8 +62,8 @@ export async function V1HomePage() {
       <section id="news" className="bg-card pb-[30px] pt-0 md:pb-[38px] md:pt-2">
         <div className="mx-auto max-w-[1200px] px-4 md:px-0">
           <div className="flex items-end justify-between gap-4">
-            <div><h2 className="text-2xl font-bold text-foreground">行业资讯</h2></div>
-            <Link href="/news" className="text-sm font-medium text-primary hover:text-accent">查看全部资讯</Link>
+            <div><h2 className="text-2xl font-bold text-foreground">{data.site.copy.home.newsTitle}</h2></div>
+            <Link href="/news" className="text-sm font-medium text-primary hover:text-accent">{data.site.copy.home.newsLinkText}</Link>
           </div>
           <div className="mt-6 grid gap-5 md:grid-cols-3">
             {homeNews.map((item) => (

@@ -25,6 +25,12 @@ export function V1Header() {
           {site.showName ? <p className="v1-brand-name whitespace-nowrap text-base font-bold">{site.name}</p> : null}
         </Link>
 
+        {site.showContactButton ? (
+          <Link href="/contact" className="ml-auto flex size-10 shrink-0 items-center justify-center rounded-lg text-white shadow-sm lg:hidden" style={{ background: 'var(--v1-button-bg)' }} title={site.contactButtonText} aria-label={site.contactButtonText}>
+            <Headphones className="size-5" />
+          </Link>
+        ) : null}
+
         <form onSubmit={handleSearch} className="relative order-3 min-w-0 flex-1 basis-full md:order-none md:basis-auto">
           <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
           <input

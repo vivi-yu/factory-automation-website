@@ -38,6 +38,41 @@ export const DEFAULT_SITE_CONFIG: SiteConfig = {
     { icon: 'globe', title: '需求共享', description: '及时了解企业合作需求' },
     { icon: 'users', title: '高效对接', description: '帮助企业建立合作机会' },
   ],
+  copy: {
+    home: {
+      demandsTitle: '最新需求动态',
+      demandsDescription: '聚焦企业最新业务动态，展示合作需求、项目信息及行业资讯，促进产业资源高效对接。',
+      demandsLinkText: '查看更多需求',
+      newsTitle: '行业资讯',
+      newsLinkText: '查看全部资讯',
+    },
+    companies: {
+      title: '全部企业',
+      description: '按企业分类查看资源，所有合作咨询统一进入平台客服。',
+      allLabel: '全部',
+    },
+    demands: {
+      title: '最新需求动态',
+      description: '聚焦企业最新业务动态，展示合作需求、项目信息及行业资讯，促进产业资源高效对接。',
+    },
+    news: {
+      title: '产业观察与资讯',
+      description: '持续整理自动化、供应链、技术服务和项目对接相关动态。',
+    },
+    search: {
+      eyebrow: '搜索',
+      title: '搜索结果',
+      description: '可搜索企业名称、主营业务、需求标题、地区和关键词。',
+      companiesTitle: '企业结果',
+      demandsTitle: '需求结果',
+      companiesEmpty: '暂无匹配企业。',
+      demandsEmpty: '暂无匹配需求。',
+    },
+    companyDetail: {
+      matchTitle: '平台对接',
+      matchDescription: '企业电话、微信、联系人不直接展示。请提交留言，由平台客服确认需求后人工撮合。',
+    },
+  },
   theme: {
     primary: '#1E40AF',
     primaryDark: '#111827',

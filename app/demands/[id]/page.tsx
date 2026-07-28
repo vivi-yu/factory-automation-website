@@ -6,8 +6,19 @@ import { V1FloatingActions } from '@/components/v1/V1FloatingActions'
 import { V1Footer } from '@/components/v1/V1Footer'
 import { V1Header } from '@/components/v1/V1Header'
 import { getCmsData } from '@/lib/cms/data.server'
+import { getPageMetadata } from '@/lib/cms/metadata.server'
 import { getCategory, getCompany, getCompanyName, getDemand, latestDemands } from '@/lib/cms/selectors'
 import type { Category, Company } from '@/lib/cms/types'
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const data = await getCmsData()
+  const demand = getDemand(data, id)
+  return getPageMetadata('demands', demand ? {
+    title: `${demand.title} | ${data.site.name}`,
+    description: demand.content,
+  } : {})
+}
 
 export default async function V1DemandDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params

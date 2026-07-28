@@ -52,6 +52,18 @@ export type Banner = {
   id: string
   image: string
   alt: string
+  title: string
+  description: string
+  linkLabel: string
+  linkUrl: string
+}
+
+export type PageSeoKey = 'home' | 'companies' | 'demands' | 'news' | 'contact' | 'search'
+
+export type SeoConfig = {
+  title: string
+  description: string
+  keywords: string
 }
 
 export type SiteLink = {
@@ -107,16 +119,35 @@ export type SiteConfig = {
   contactFormDescription: string
   homeFeaturesTitle: string
   homeFeatures: SiteFeature[]
-  theme: SiteTheme
-  seo: {
-    title: string
-    description: string
-    keywords: string
+  copy: {
+    home: {
+      demandsTitle: string
+      demandsDescription: string
+      demandsLinkText: string
+      newsTitle: string
+      newsLinkText: string
+    }
+    companies: { title: string; description: string; allLabel: string }
+    demands: { title: string; description: string }
+    news: { title: string; description: string }
+    search: {
+      eyebrow: string
+      title: string
+      description: string
+      companiesTitle: string
+      demandsTitle: string
+      companiesEmpty: string
+      demandsEmpty: string
+    }
+    companyDetail: { matchTitle: string; matchDescription: string }
   }
+  theme: SiteTheme
+  seo: SeoConfig
 }
 
 export type CmsData = {
   site: SiteConfig
+  pageSeo: Partial<Record<PageSeoKey, SeoConfig>>
   categories: Category[]
   companies: Company[]
   demands: Demand[]

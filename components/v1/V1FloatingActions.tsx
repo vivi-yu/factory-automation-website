@@ -15,7 +15,7 @@ export function V1FloatingActions() {
   }
 
   return (
-    <div className="fixed bottom-5 right-4 z-50 flex flex-col gap-2">
+    <div className="fixed bottom-5 right-4 z-50 hidden flex-col gap-2 sm:flex">
       {showContactActions ? <Link href="/contact" className="flex size-11 items-center justify-center rounded-lg text-white shadow-lg transition hover:opacity-90" style={{ background: 'var(--v1-button-bg)' }} title="联系平台客服">
         <Headphones className="size-5" />
       </Link> : null}

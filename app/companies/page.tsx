@@ -5,9 +5,12 @@ import { V1FloatingActions } from '@/components/v1/V1FloatingActions'
 import { V1Footer } from '@/components/v1/V1Footer'
 import { V1Header } from '@/components/v1/V1Header'
 import { getCmsData } from '@/lib/cms/data.server'
+import { getPageMetadata } from '@/lib/cms/metadata.server'
 import { categoryCompanies, getCategory } from '@/lib/cms/selectors'
 
 const PAGE_SIZE = 10
+
+export const generateMetadata = () => getPageMetadata('companies')
 
 export default async function V1CompaniesPage({ searchParams }: { searchParams: Promise<{ category?: string; page?: string }> }) {
   const { category, page = '1' } = await searchParams
@@ -32,11 +35,11 @@ export default async function V1CompaniesPage({ searchParams }: { searchParams: 
             <ArrowLeft className="size-4" />
             返回首页
           </Link>
-          <h1 className="mt-6 text-2xl font-bold">{activeCategory ? activeCategory.name : '全部企业'}</h1>
-          <p className="mt-3 text-muted-foreground">按企业分类查看资源，所有合作咨询统一进入平台客服。</p>
+          <h1 className="mt-6 text-2xl font-bold">{activeCategory ? activeCategory.name : data.site.copy.companies.title}</h1>
+          <p className="mt-3 text-muted-foreground">{data.site.copy.companies.description}</p>
 
           <div className="mt-6 flex flex-wrap gap-2">
-            <Link href="/companies" className={`rounded-full border px-4 py-2 text-sm font-medium transition ${!activeCategory ? 'border-primary bg-primary text-white' : 'border-border bg-background hover:border-primary'}`}>全部</Link>
+            <Link href="/companies" className={`rounded-full border px-4 py-2 text-sm font-medium transition ${!activeCategory ? 'border-primary bg-primary text-white' : 'border-border bg-background hover:border-primary'}`}>{data.site.copy.companies.allLabel}</Link>
             {categories.map((item) => (
               <Link key={item.id} href={`/companies?category=${item.id}`} className={`rounded-full border px-4 py-2 text-sm font-medium transition ${activeCategory?.id === item.id ? 'border-primary bg-primary text-white' : 'border-border bg-background hover:border-primary'}`}>{item.name}</Link>
             ))}
@@ -74,4 +77,3 @@ function PageLink({ disabled, href, label, icon }: { disabled: boolean; href: st
   }
   return <Link href={href} className="inline-flex h-10 items-center gap-1 rounded-lg border border-border bg-card px-3 text-sm font-medium hover:border-primary">{icon === 'prev' ? <ChevronLeft className="size-4" /> : null}{label}{icon === 'next' ? <ChevronRight className="size-4" /> : null}</Link>
 }
-

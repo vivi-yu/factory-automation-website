@@ -3,6 +3,7 @@ import { DEFAULT_SITE_CONFIG } from './cms/site-defaults'
 
 export const developmentFixtures: CmsData = {
   site: DEFAULT_SITE_CONFIG,
+  pageSeo: {},
   categories: [
     { id: 'brand-owner', name: '终端企业', description: '制造业项目方与终端应用企业。', image: '/categories-manufacturing.png', sort: 100, status: 'visible' },
     { id: 'automation', name: '自动化企业', description: '系统集成、控制、机器人与视觉服务。', image: '/categories-automation.png', sort: 200, status: 'visible' },
@@ -21,7 +22,7 @@ export const developmentFixtures: CmsData = {
     { id: 'demo-news', title: '产业资讯内容示例', summary: '配置 Directus 后，后台发布的中文文章会显示在这里。', date: '2026-07-01', image: '/features-automation.png', content: ['这是仅用于本地开发的占位文章。'] },
   ],
   banners: [
-    { id: 'demo-banner-1', image: '/hero-banner-1.png', alt: '产业资源对接平台横幅' },
-    { id: 'demo-banner-2', image: '/hero-banner-2.png', alt: '工厂自动化资源平台横幅' },
+    { id: 'demo-banner-1', image: '/hero-banner-1.png', alt: '产业资源对接平台横幅', title: '', description: '', linkLabel: '', linkUrl: '' },
+    { id: 'demo-banner-2', image: '/hero-banner-2.png', alt: '工厂自动化资源平台横幅', title: '', description: '', linkLabel: '', linkUrl: '' },
   ],
 }

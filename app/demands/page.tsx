@@ -6,9 +6,12 @@ import { V1FloatingActions } from '@/components/v1/V1FloatingActions'
 import { V1Footer } from '@/components/v1/V1Footer'
 import { V1Header } from '@/components/v1/V1Header'
 import { getCmsData } from '@/lib/cms/data.server'
+import { getPageMetadata } from '@/lib/cms/metadata.server'
 import { getCompanyName, latestDemands } from '@/lib/cms/selectors'
 
 const PAGE_SIZE = 6
+
+export const generateMetadata = () => getPageMetadata('demands')
 
 export default async function V1DemandsPage({ searchParams }: { searchParams: Promise<{ page?: string }> }) {
   const { page = '1' } = await searchParams
@@ -28,8 +31,8 @@ export default async function V1DemandsPage({ searchParams }: { searchParams: Pr
             <ArrowLeft className="size-4" />
             返回首页
           </Link>
-          <h1 className="mt-6 text-2xl font-bold">最新需求动态</h1>
-          <p className="mt-3 max-w-3xl text-muted-foreground">聚焦企业最新业务动态，展示合作需求、项目信息及行业资讯，促进产业资源高效对接。</p>
+          <h1 className="mt-6 text-2xl font-bold">{data.site.copy.demands.title}</h1>
+          <p className="mt-3 max-w-3xl text-muted-foreground">{data.site.copy.demands.description}</p>
         </div>
       </section>
 
@@ -73,4 +76,3 @@ function PageLink({ disabled, href, label, icon }: { disabled: boolean; href: st
   if (disabled) return <span className="inline-flex h-10 items-center gap-1 rounded-lg border border-border/50 px-3 text-sm text-muted-foreground opacity-50">{icon === 'prev' ? <ChevronLeft className="size-4" /> : null}{label}{icon === 'next' ? <ChevronRight className="size-4" /> : null}</span>
   return <Link href={href} className="inline-flex h-10 items-center gap-1 rounded-lg border border-border bg-card px-3 text-sm font-medium hover:border-primary">{icon === 'prev' ? <ChevronLeft className="size-4" /> : null}{label}{icon === 'next' ? <ChevronRight className="size-4" /> : null}</Link>
 }
-

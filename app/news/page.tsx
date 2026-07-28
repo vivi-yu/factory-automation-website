@@ -4,6 +4,9 @@ import { V1FloatingActions } from '@/components/v1/V1FloatingActions'
 import { V1Footer } from '@/components/v1/V1Footer'
 import { V1Header } from '@/components/v1/V1Header'
 import { getCmsData } from '@/lib/cms/data.server'
+import { getPageMetadata } from '@/lib/cms/metadata.server'
+
+export const generateMetadata = () => getPageMetadata('news')
 
 export default async function V1NewsPage() {
   const data = await getCmsData()
@@ -13,8 +16,8 @@ export default async function V1NewsPage() {
       <section className="border-b border-primary/10 bg-gradient-to-br from-[#fff4f1] via-white to-[#ffe1d8] py-12">
         <div className="mx-auto max-w-7xl px-4 md:px-6">
           <Link href="/" className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:text-accent"><ArrowLeft className="size-4" />返回首页</Link>
-          <h1 className="mt-6 text-2xl font-bold">产业观察与资讯</h1>
-          <p className="mt-3 max-w-3xl text-muted-foreground">持续整理自动化、供应链、技术服务和项目对接相关动态。</p>
+          <h1 className="mt-6 text-2xl font-bold">{data.site.copy.news.title}</h1>
+          <p className="mt-3 max-w-3xl text-muted-foreground">{data.site.copy.news.description}</p>
         </div>
       </section>
       <section className="py-12">
@@ -36,5 +39,4 @@ export default async function V1NewsPage() {
     </main>
   )
 }
-
 

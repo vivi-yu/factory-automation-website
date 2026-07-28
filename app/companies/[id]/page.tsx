@@ -7,7 +7,18 @@ import { V1FloatingActions } from '@/components/v1/V1FloatingActions'
 import { V1Footer } from '@/components/v1/V1Footer'
 import { V1Header } from '@/components/v1/V1Header'
 import { getCmsData } from '@/lib/cms/data.server'
+import { getPageMetadata } from '@/lib/cms/metadata.server'
 import { getCategory, getCompany, getCompanyDemands, relatedCompanies } from '@/lib/cms/selectors'
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const data = await getCmsData()
+  const company = getCompany(data, id)
+  return getPageMetadata('companies', company ? {
+    title: `${company.name} | ${data.site.name}`,
+    description: company.intro,
+  } : {})
+}
 
 export default async function V1CompanyDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -47,7 +58,7 @@ export default async function V1CompanyDetailPage({ params }: { params: Promise<
           </div>
           <aside className="space-y-6">
             <div className="rounded-lg border border-primary/10 bg-card p-5 shadow-sm"><h2 className="font-bold">最新需求</h2><div className="mt-3 space-y-3">{demands.length > 0 ? demands.map((demand) => <Link key={demand.id} href={`/demands/${demand.id}`} className="block rounded-lg bg-muted p-3 hover:bg-primary/10"><p className="text-sm font-semibold text-foreground">{demand.title}</p><p className="mt-1 text-xs text-muted-foreground">{demand.publishedAt} · {demand.type}</p></Link>) : <p className="text-sm text-muted-foreground">暂无公开需求。</p>}</div></div>
-            <div className="rounded-lg border border-primary/10 bg-white p-5 shadow-sm"><h2 className="font-bold">平台对接</h2><p className="mt-2 text-sm leading-6 text-muted-foreground">企业电话、微信、联系人不直接展示。请提交留言，由平台客服确认需求后人工撮合。</p><Link href="/contact" className="mt-4 block"><Button className="h-10 w-full rounded-lg bg-gradient-to-r from-primary to-accent text-white hover:opacity-90">联系平台客服</Button></Link></div>
+            <div className="rounded-lg border border-primary/10 bg-white p-5 shadow-sm"><h2 className="font-bold">{data.site.copy.companyDetail.matchTitle}</h2><p className="mt-2 text-sm leading-6 text-muted-foreground">{data.site.copy.companyDetail.matchDescription}</p><Link href="/contact" className="mt-4 block"><Button className="h-10 w-full rounded-lg bg-gradient-to-r from-primary to-accent text-white hover:opacity-90">{data.site.contactButtonText}</Button></Link></div>
           </aside>
         </div>
       </section>

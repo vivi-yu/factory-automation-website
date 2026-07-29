@@ -52,10 +52,6 @@ export type Banner = {
   id: string
   image: string
   alt: string
-  title: string
-  description: string
-  linkLabel: string
-  linkUrl: string
 }
 
 export type PageSeoKey = 'home' | 'companies' | 'demands' | 'news' | 'contact' | 'search'

@@ -48,10 +48,6 @@ type BannerRow = {
   id: number
   image?: FileRelation
   factory_alt_text?: string
-  factory_title?: string
-  factory_description?: string
-  factory_link_label?: string
-  factory_link_url?: string
 }
 type SeoPageRow = {
   page_key: string
@@ -281,21 +277,16 @@ async function readNews(): Promise<News[]> {
 
 async function readBanners(): Promise<Banner[]> {
   const rows = await readItems<BannerRow>('banners', new URLSearchParams({
-    fields: 'id,image,factory_alt_text,factory_title,factory_description,factory_link_label,factory_link_url',
+    fields: 'id,image,factory_alt_text',
     sort: 'sort',
     limit: '-1',
   }))
   return rows.flatMap((row) => {
     const image = directusAsset(fileId(row.image))
-    const linkUrl = text(row.factory_link_url, '')
     return image ? [{
       id: String(row.id),
       image,
       alt: text(row.factory_alt_text, '产业资源对接平台横幅'),
-      title: text(row.factory_title, ''),
-      description: text(row.factory_description, ''),
-      linkLabel: text(row.factory_link_label, ''),
-      linkUrl: /^javascript:/i.test(linkUrl) ? '' : linkUrl,
     }] : []
   })
 }

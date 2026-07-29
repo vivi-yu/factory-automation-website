@@ -22,7 +22,7 @@ export const developmentFixtures: CmsData = {
     { id: 'demo-news', title: '产业资讯内容示例', summary: '配置 Directus 后，后台发布的中文文章会显示在这里。', date: '2026-07-01', image: '/features-automation.png', content: ['这是仅用于本地开发的占位文章。'] },
   ],
   banners: [
-    { id: 'demo-banner-1', image: '/hero-banner-1.png', alt: '产业资源对接平台横幅', title: '', description: '', linkLabel: '', linkUrl: '' },
-    { id: 'demo-banner-2', image: '/hero-banner-2.png', alt: '工厂自动化资源平台横幅', title: '', description: '', linkLabel: '', linkUrl: '' },
+    { id: 'demo-banner-1', image: '/hero-banner-1.png', alt: '产业资源对接平台横幅' },
+    { id: 'demo-banner-2', image: '/hero-banner-2.png', alt: '工厂自动化资源平台横幅' },
   ],
 }

@@ -54,7 +54,9 @@ type BannerRow = {
 }
 type SeoPageRow = {
   page_key: string
-  translations?: Array<{ title?: string; keywords?: string; description?: string }>
+  title?: string
+  keywords?: string
+  description?: string
 }
 type SiteCopyFields = {
   site_name?: string
@@ -295,20 +297,18 @@ async function readBanners(): Promise<Banner[]> {
 
 async function readPageSeo(): Promise<Partial<Record<PageSeoKey, SeoConfig>>> {
   const rows = await readItems<SeoPageRow>('seo_pages', new URLSearchParams({
-    fields: 'page_key,translations.title,translations.keywords,translations.description',
-    'deep[translations][_filter][languages_code][_eq]': 'zh-CN',
+    fields: 'page_key,title,keywords,description',
     limit: '-1',
   }))
   const keys = new Set<PageSeoKey>(['home', 'companies', 'demands', 'news', 'contact', 'search'])
   const result: Partial<Record<PageSeoKey, SeoConfig>> = {}
   for (const row of rows) {
     if (!keys.has(row.page_key as PageSeoKey)) continue
-    const translation = row.translations?.[0]
-    if (!translation?.title) continue
+    if (!row.title) continue
     result[row.page_key as PageSeoKey] = {
-      title: translation.title,
-      description: translation.description || '',
-      keywords: translation.keywords || '',
+      title: row.title,
+      description: row.description || '',
+      keywords: row.keywords || '',
     }
   }
   return result

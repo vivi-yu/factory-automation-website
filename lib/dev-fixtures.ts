@@ -12,14 +12,14 @@ export const developmentFixtures: CmsData = {
     { id: 'support', name: '配套服务', description: '物流、检测、认证和项目协同服务。', image: '/categories-support.png', sort: 5, status: 'visible' },
   ],
   companies: [
-    { id: 'demo-integrator', logo: '集', name: '自动化集成服务示例', categoryId: 'automation', sort: 1, featured: true, intro: '本地开发占位数据。配置 Directus 后将显示后台发布的真实企业内容。', businessTags: ['系统集成', '产线改造'], serviceScope: ['方案设计', '安装调试'], images: ['/categories-automation.png'], province: '江苏', city: '苏州', status: 'visible', updatedAt: '2026-07-01' },
-    { id: 'demo-supplier', logo: '供', name: '工业品供应服务示例', categoryId: 'supplier', sort: 2, featured: true, intro: '本地开发占位数据。正式环境不会加载此记录。', businessTags: ['工业品', '备件'], serviceScope: ['选型', '交付'], images: ['/categories-suppliers.png'], province: '上海', city: '上海', status: 'visible', updatedAt: '2026-07-01' },
+    { id: 'demo-integrator', logo: '集', name: '自动化集成服务示例', categoryId: 'automation', sort: 1, featured: true, intro: '本地开发占位数据。配置 Directus 后将显示后台发布的真实企业内容。', introHtml: '<p>本地开发占位数据。配置 Directus 后将显示后台发布的真实企业内容。</p>', businessTags: ['系统集成', '产线改造'], serviceScope: ['方案设计', '安装调试'], images: ['/categories-automation.png'], province: '江苏', city: '苏州', status: 'visible', updatedAt: '2026-07-01' },
+    { id: 'demo-supplier', logo: '供', name: '工业品供应服务示例', categoryId: 'supplier', sort: 2, featured: true, intro: '本地开发占位数据。正式环境不会加载此记录。', introHtml: '<p>本地开发占位数据。正式环境不会加载此记录。</p>', businessTags: ['工业品', '备件'], serviceScope: ['选型', '交付'], images: ['/categories-suppliers.png'], province: '上海', city: '上海', status: 'visible', updatedAt: '2026-07-01' },
   ],
   demands: [
-    { id: 'demo-demand', companyId: 'demo-integrator', title: '自动化项目合作需求示例', type: '项目合作', content: '这是本地开发占位内容。配置 Directus 后将显示后台发布的真实需求。', publishedAt: '2026-07-01', sort: 1, status: 'active' },
+    { id: 'demo-demand', companyId: 'demo-integrator', title: '自动化项目合作需求示例', type: '项目合作', content: '这是本地开发占位内容。配置 Directus 后将显示后台发布的真实需求。', contentHtml: '<p>这是本地开发占位内容。配置 Directus 后将显示后台发布的真实需求。</p>', publishedAt: '2026-07-01', sort: 1, status: 'active' },
   ],
   news: [
-    { id: 'demo-news', title: '产业资讯内容示例', summary: '配置 Directus 后，后台发布的中文文章会显示在这里。', date: '2026-07-01', image: '/features-automation.png', content: ['这是仅用于本地开发的占位文章。'] },
+    { id: 'demo-news', title: '产业资讯内容示例', summary: '配置 Directus 后，后台发布的中文文章会显示在这里。', date: '2026-07-01', image: '/features-automation.png', contentHtml: '<p>这是仅用于本地开发的占位文章。</p>' },
   ],
   banners: [
     { id: 'demo-banner-1', image: '/hero-banner-1.png', alt: '产业资源对接平台横幅' },

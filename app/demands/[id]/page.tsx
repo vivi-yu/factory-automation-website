@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { V1FloatingActions } from '@/components/v1/V1FloatingActions'
 import { V1Footer } from '@/components/v1/V1Footer'
 import { V1Header } from '@/components/v1/V1Header'
+import { V1RichText } from '@/components/v1/V1RichText'
 import { getCmsData } from '@/lib/cms/data.server'
 import { getPageMetadata } from '@/lib/cms/metadata.server'
 import { getCategory, getCompany, getCompanyName, getDemand, latestDemands } from '@/lib/cms/selectors'
@@ -48,7 +49,7 @@ export default async function V1DemandDetailPage({ params }: { params: Promise<{
               <h2 className="text-xl font-bold">需求内容</h2>
               <p className="text-sm text-muted-foreground">更新时间：{demand.publishedAt}</p>
             </div>
-            <p className="mt-5 leading-8 text-muted-foreground">{demand.content}</p>
+            <V1RichText html={demand.contentHtml} className="mt-5" />
             <div className="mt-6 flex flex-col gap-3 border-t border-border/30 pt-5 sm:flex-row sm:items-center">
               <Link href="/contact">
                 <Button className="h-10 gap-2 rounded-lg text-white hover:opacity-90" style={{ background: 'var(--v1-button-bg)' }}>

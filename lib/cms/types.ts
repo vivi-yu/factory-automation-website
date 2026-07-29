@@ -17,6 +17,7 @@ export type Company = {
   sort: number
   featured: boolean
   intro: string
+  introHtml: string
   businessTags: string[]
   serviceScope: string[]
   images: string[]
@@ -34,6 +35,7 @@ export type Demand = {
   title: string
   type: string
   content: string
+  contentHtml: string
   publishedAt: string
   sort: number
   status: 'active' | 'offline'
@@ -45,7 +47,7 @@ export type News = {
   summary: string
   date: string
   image: string
-  content: string[]
+  contentHtml: string
 }
 
 export type Banner = {

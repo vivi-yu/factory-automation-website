@@ -4,6 +4,7 @@ import { ArrowLeft, CalendarDays } from 'lucide-react'
 import { V1FloatingActions } from '@/components/v1/V1FloatingActions'
 import { V1Footer } from '@/components/v1/V1Footer'
 import { V1Header } from '@/components/v1/V1Header'
+import { V1RichText } from '@/components/v1/V1RichText'
 import { getCmsData } from '@/lib/cms/data.server'
 import { getPageMetadata } from '@/lib/cms/metadata.server'
 
@@ -39,9 +40,7 @@ export default async function V1NewsDetailPage({ params }: { params: Promise<{ i
         <div className="mx-auto grid max-w-7xl gap-6 px-4 md:px-6 lg:grid-cols-[1fr_340px]">
           <article className="rounded-lg border border-primary/10 bg-card p-6 shadow-sm">
             <img src={news.image} alt="" className="mb-6 h-auto w-full rounded-lg object-contain" />
-            <div className="space-y-5 text-base leading-8 text-muted-foreground">
-              {news.content.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
-            </div>
+            <V1RichText html={news.contentHtml} className="text-base" />
           </article>
           <aside className="rounded-lg border border-primary/10 bg-card p-5 shadow-sm">
             <h2 className="font-bold">相关资讯</h2>

@@ -6,6 +6,7 @@ import { V1CompanyCard } from '@/components/v1/V1CompanyCard'
 import { V1FloatingActions } from '@/components/v1/V1FloatingActions'
 import { V1Footer } from '@/components/v1/V1Footer'
 import { V1Header } from '@/components/v1/V1Header'
+import { V1RichText } from '@/components/v1/V1RichText'
 import { getCmsData } from '@/lib/cms/data.server'
 import { getPageMetadata } from '@/lib/cms/metadata.server'
 import { getCategory, getCompany, getCompanyDemands, relatedCompanies } from '@/lib/cms/selectors'
@@ -52,7 +53,7 @@ export default async function V1CompanyDetailPage({ params }: { params: Promise<
       <section className="py-10">
         <div className="mx-auto grid max-w-7xl gap-6 px-4 md:px-6 lg:grid-cols-[1fr_360px]">
           <div className="space-y-6">
-            <div className="rounded-lg border border-primary/10 bg-card p-6 shadow-sm"><h2 className="text-xl font-bold">企业介绍</h2><p className="mt-4 leading-8 text-muted-foreground">{company.intro}</p><div className="mt-5 flex flex-wrap gap-2">{company.businessTags.map((tag) => <span key={tag} className="rounded-md bg-primary/10 px-3 py-1 text-sm text-primary">{tag}</span>)}</div></div>
+            <div className="rounded-lg border border-primary/10 bg-card p-6 shadow-sm"><h2 className="text-xl font-bold">企业介绍</h2><V1RichText html={company.introHtml} className="mt-4" /><div className="mt-5 flex flex-wrap gap-2">{company.businessTags.map((tag) => <span key={tag} className="rounded-md bg-primary/10 px-3 py-1 text-sm text-primary">{tag}</span>)}</div></div>
             <div className="rounded-lg border border-primary/10 bg-card p-6 shadow-sm"><h2 className="text-xl font-bold">服务范围</h2><div className="mt-4 grid gap-3 sm:grid-cols-2">{company.serviceScope.map((item) => <div key={item} className="v1-inner-panel rounded-lg p-4 text-sm font-medium text-muted-foreground">{item}</div>)}</div></div>
             {company.images.length > 0 ? <div className="rounded-lg border border-primary/10 bg-card p-6 shadow-sm"><h2 className="text-xl font-bold">企业图片</h2><div className="mt-4 grid gap-3 sm:grid-cols-3">{company.images.slice(0, 5).map((image) => <img key={image} src={image} alt="" className="h-36 w-full rounded-lg object-cover" />)}</div></div> : null}
           </div>

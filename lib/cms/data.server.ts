@@ -3,6 +3,7 @@ import 'server-only'
 import { cache } from 'react'
 import { directusAsset, readItems, readSingleton } from './client.server'
 import { DEFAULT_SITE_CONFIG } from './site-defaults'
+import { plainTextFromRichText, sanitizeRichTextHtml } from './rich-text.server'
 import type { Banner, Category, CmsData, Company, Demand, News, PageSeoKey, SeoConfig, SiteConfig, SiteFeature, SiteLink } from './types'
 import { developmentFixtures } from '@/lib/dev-fixtures'
 
@@ -186,12 +187,6 @@ function siteFeatures(value: unknown): SiteFeature[] {
   })
 }
 
-function textParagraphs(value?: string): string[] {
-  if (!value) return []
-  const plain = value.replace(/<\/?[^>]+>/g, '\n').replace(/&nbsp;/g, ' ').trim()
-  return plain.split(/\n+/).map((item) => item.trim()).filter(Boolean)
-}
-
 async function readCategories(): Promise<Category[]> {
   const rows = await readItems<CategoryRow>('factory_categories', new URLSearchParams({
     fields: 'id,slug,name,description,image,sort',
@@ -214,25 +209,29 @@ async function readCompanies(): Promise<Company[]> {
     sort: 'sort',
     limit: '-1',
   }))
-  return rows.map((row) => ({
-    directusId: row.id,
-    id: row.slug,
-    logo: row.logo_text || row.name.slice(0, 2),
-    logoImage: directusAsset(fileId(row.logo)),
-    name: row.name,
-    categoryId: relationValue(row.category_id, 'slug'),
-    sort: row.sort ?? 1,
-    featured: Boolean(row.is_featured),
-    intro: row.intro || '',
-    businessTags: stringList(row.business_tags),
-    serviceScope: stringList(row.service_scope),
-    images: (row.images || []).map((item) => directusAsset(fileId(item.file_id))).filter(Boolean),
-    website: row.website,
-    province: row.province || '',
-    city: row.city || '',
-    status: 'visible',
-    updatedAt: row.date_updated?.slice(0, 10) || '',
-  }))
+  return rows.map((row) => {
+    const introHtml = sanitizeRichTextHtml(row.intro)
+    return {
+      directusId: row.id,
+      id: row.slug,
+      logo: row.logo_text || row.name.slice(0, 2),
+      logoImage: directusAsset(fileId(row.logo)),
+      name: row.name,
+      categoryId: relationValue(row.category_id, 'slug'),
+      sort: row.sort ?? 1,
+      featured: Boolean(row.is_featured),
+      intro: plainTextFromRichText(introHtml),
+      introHtml,
+      businessTags: stringList(row.business_tags),
+      serviceScope: stringList(row.service_scope),
+      images: (row.images || []).map((item) => directusAsset(fileId(item.file_id))).filter(Boolean),
+      website: row.website,
+      province: row.province || '',
+      city: row.city || '',
+      status: 'visible' as const,
+      updatedAt: row.date_updated?.slice(0, 10) || '',
+    }
+  })
 }
 
 async function readDemands(): Promise<Demand[]> {
@@ -241,17 +240,21 @@ async function readDemands(): Promise<Demand[]> {
     sort: '-date_published,sort',
     limit: '-1',
   }))
-  return rows.map((row) => ({
-    directusId: row.id,
-    id: row.slug,
-    companyId: relationValue(row.company_id, 'slug'),
-    title: row.title,
-    type: relationValue(row.demand_type_id, 'name'),
-    content: row.content || '',
-    publishedAt: row.date_published?.slice(0, 10) || '',
-    sort: row.sort ?? 1,
-    status: 'active',
-  }))
+  return rows.map((row) => {
+    const contentHtml = sanitizeRichTextHtml(row.content)
+    return {
+      directusId: row.id,
+      id: row.slug,
+      companyId: relationValue(row.company_id, 'slug'),
+      title: row.title,
+      type: relationValue(row.demand_type_id, 'name'),
+      content: plainTextFromRichText(contentHtml),
+      contentHtml,
+      publishedAt: row.date_published?.slice(0, 10) || '',
+      sort: row.sort ?? 1,
+      status: 'active' as const,
+    }
+  })
 }
 
 async function readNews(): Promise<News[]> {
@@ -270,7 +273,7 @@ async function readNews(): Promise<News[]> {
       summary: translation.excerpt || '',
       date: row.date_published?.slice(0, 10) || '',
       image: directusAsset(fileId(row.image)) || '/features-automation.png',
-      content: textParagraphs(translation.content),
+      contentHtml: sanitizeRichTextHtml(translation.content),
     }]
   })
 }

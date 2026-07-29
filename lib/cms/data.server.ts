@@ -56,7 +56,7 @@ type SeoPageRow = {
   page_key: string
   translations?: Array<{ title?: string; keywords?: string; description?: string }>
 }
-type SiteTranslationRow = {
+type SiteCopyFields = {
   site_name?: string
   company_address?: string
   quote_button_text?: string
@@ -93,7 +93,7 @@ type SiteTranslationRow = {
   factory_company_match_title?: string
   factory_company_match_description?: string
 }
-type SiteRow = {
+type SiteRow = SiteCopyFields & {
   site_title?: string
   logo?: FileRelation
   footer_logo?: FileRelation
@@ -126,7 +126,6 @@ type SiteRow = {
   quick_links?: unknown
   factory_contact_qr?: FileRelation
   factory_contact_banner?: FileRelation
-  translations?: SiteTranslationRow[]
 }
 
 function fileId(value: FileRelation) {
@@ -326,31 +325,25 @@ async function readSiteConfig(): Promise<SiteConfig> {
       'header_hover_text_color', 'quote_button_enabled', 'header_navigation_links',
       'footer_background_color', 'footer_text_color', 'footer_link_color', 'email', 'phone',
       'quick_links', 'factory_contact_qr', 'factory_contact_banner',
-      'translations.site_name', 'translations.company_address', 'translations.quote_button_text',
-      'translations.default_meta_title', 'translations.default_meta_keywords',
-      'translations.default_meta_description', 'translations.factory_footer_description',
-      'translations.factory_contact_eyebrow', 'translations.factory_contact_title',
-      'translations.factory_contact_description', 'translations.factory_contact_form_title',
-      'translations.factory_contact_form_description', 'translations.factory_home_features_title',
-      'translations.factory_home_features', 'translations.factory_home_demands_title',
-      'translations.factory_home_demands_description', 'translations.factory_home_demands_link_text',
-      'translations.factory_home_news_title', 'translations.factory_home_news_link_text',
-      'translations.factory_companies_title', 'translations.factory_companies_description',
-      'translations.factory_companies_all_label', 'translations.factory_demands_title',
-      'translations.factory_demands_description', 'translations.factory_news_title',
-      'translations.factory_news_description', 'translations.factory_search_eyebrow',
-      'translations.factory_search_title', 'translations.factory_search_description',
-      'translations.factory_search_companies_title', 'translations.factory_search_demands_title',
-      'translations.factory_search_companies_empty', 'translations.factory_search_demands_empty',
-      'translations.factory_company_match_title', 'translations.factory_company_match_description',
+      'site_name', 'company_address', 'quote_button_text', 'default_meta_title',
+      'default_meta_keywords', 'default_meta_description', 'factory_footer_description',
+      'factory_contact_eyebrow', 'factory_contact_title', 'factory_contact_description',
+      'factory_contact_form_title', 'factory_contact_form_description', 'factory_home_features_title',
+      'factory_home_features', 'factory_home_demands_title', 'factory_home_demands_description',
+      'factory_home_demands_link_text', 'factory_home_news_title', 'factory_home_news_link_text',
+      'factory_companies_title', 'factory_companies_description', 'factory_companies_all_label',
+      'factory_demands_title', 'factory_demands_description', 'factory_news_title',
+      'factory_news_description', 'factory_search_eyebrow', 'factory_search_title',
+      'factory_search_description', 'factory_search_companies_title', 'factory_search_demands_title',
+      'factory_search_companies_empty', 'factory_search_demands_empty', 'factory_company_match_title',
+      'factory_company_match_description',
     ].join(','),
-    'deep[translations][_filter][languages_code][_eq]': 'zh-CN',
     limit: '1',
   }))
   if (!row) return DEFAULT_SITE_CONFIG
 
   const defaults = DEFAULT_SITE_CONFIG
-  const translation = row.translations?.[0] || {}
+  const translation: SiteCopyFields = row
   const logo = directusAsset(fileId(row.logo)) || defaults.logo
   const features = siteFeatures(translation.factory_home_features)
   return {

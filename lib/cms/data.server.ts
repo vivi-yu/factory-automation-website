@@ -43,7 +43,9 @@ type ArticleRow = {
   slug: string
   image?: FileRelation
   date_published?: string
-  translations?: Array<{ title?: string; excerpt?: string; content?: string }>
+  title?: string
+  excerpt?: string
+  content?: string
 }
 type BannerRow = {
   id: number
@@ -259,21 +261,19 @@ async function readDemands(): Promise<Demand[]> {
 
 async function readNews(): Promise<News[]> {
   const rows = await readItems<ArticleRow>('articles', new URLSearchParams({
-    fields: 'slug,image,date_published,translations.title,translations.excerpt,translations.content',
-    'deep[translations][_filter][languages_code][_eq]': 'zh-CN',
+    fields: 'slug,image,date_published,title,excerpt,content',
     sort: '-date_published',
     limit: '-1',
   }))
   return rows.flatMap((row) => {
-    const translation = row.translations?.[0]
-    if (!translation?.title) return []
+    if (!row.title) return []
     return [{
       id: row.slug,
-      title: translation.title,
-      summary: translation.excerpt || '',
+      title: row.title,
+      summary: row.excerpt || '',
       date: row.date_published?.slice(0, 10) || '',
       image: directusAsset(fileId(row.image)) || '/features-automation.png',
-      contentHtml: sanitizeRichTextHtml(translation.content),
+      contentHtml: sanitizeRichTextHtml(row.content),
     }]
   })
 }

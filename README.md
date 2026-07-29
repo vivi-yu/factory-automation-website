@@ -18,6 +18,7 @@ pnpm dev
 - 留言写入：浏览器只调用 `POST /api/messages`；该路由用服务端 `DIRECTUS_WRITE_TOKEN` 创建 `factory_messages`。
 - `DIRECTUS_WRITE_TOKEN` 必须属于绑定 `Factory Website Writer` policy 的服务用户。该 policy 只允许创建 `name`、`phone`、`company_name`、`content`、`source_page`，并由 Directus 固定写入 `status=pending`；不能读取留言或写入 `internal_note`。
 - `DIRECTUS_URL` 是服务端读取地址；`DIRECTUS_PUBLIC_URL` 是浏览器可访问的资源域名。
+- CMS 图片通过 `factory-banner`、`factory-banner-mobile`、`factory-thumbnail` 和 `factory-content` 预设按用途生成 WebP；预设由后台标准升级脚本维护，并禁止放大小图。
 - Directus 内容更新后可携带 `Authorization: Bearer <CMS_REVALIDATE_SECRET>` 请求 `POST /api/revalidate`。
 
 业务 schema 由 `hexia-admin/scripts/ensure-factory-automation-schema.mjs` 幂等维护；标准部署设置 `SITE_PROFILE=factory-automation`。

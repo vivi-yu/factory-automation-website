@@ -1,7 +1,7 @@
 import 'server-only'
 
 import { cache } from 'react'
-import { directusAsset, readItems, readSingleton } from './client.server'
+import { DIRECTUS_IMAGE_PRESETS, directusAsset, readItems, readSingleton } from './client.server'
 import { DEFAULT_SITE_CONFIG } from './site-defaults'
 import { plainTextFromRichText, sanitizeRichTextHtml } from './rich-text.server'
 import type { Banner, Category, CmsData, Company, Demand, News, PageSeoKey, SeoConfig, SiteConfig, SiteFeature, SiteLink } from './types'
@@ -200,7 +200,7 @@ async function readCategories(): Promise<Category[]> {
     id: row.slug,
     name: row.name,
     description: row.description || '',
-    image: directusAsset(fileId(row.image)) || '/companies-network.png',
+    image: directusAsset(fileId(row.image), DIRECTUS_IMAGE_PRESETS.thumbnail) || '/companies-network.png',
     sort: row.sort ?? 1,
     status: 'visible',
   }))
@@ -214,11 +214,12 @@ async function readCompanies(): Promise<Company[]> {
   }))
   return rows.map((row) => {
     const introHtml = sanitizeRichTextHtml(row.intro)
+    const imageIds = (row.images || []).map((item) => fileId(item.file_id)).filter((id): id is string => Boolean(id))
     return {
       directusId: row.id,
       id: row.slug,
       logo: row.logo_text || row.name.slice(0, 2),
-      logoImage: directusAsset(fileId(row.logo)),
+      logoImage: directusAsset(fileId(row.logo), DIRECTUS_IMAGE_PRESETS.thumbnail),
       name: row.name,
       categoryId: relationValue(row.category_id, 'slug'),
       sort: row.sort ?? 1,
@@ -227,7 +228,8 @@ async function readCompanies(): Promise<Company[]> {
       introHtml,
       businessTags: stringList(row.business_tags),
       serviceScope: stringList(row.service_scope),
-      images: (row.images || []).map((item) => directusAsset(fileId(item.file_id))).filter(Boolean),
+      thumbnailImage: directusAsset(imageIds[0], DIRECTUS_IMAGE_PRESETS.thumbnail),
+      images: imageIds.map((id) => directusAsset(id, DIRECTUS_IMAGE_PRESETS.content)),
       website: row.website,
       province: row.province || '',
       city: row.city || '',
@@ -273,7 +275,8 @@ async function readNews(): Promise<News[]> {
       title: row.title,
       summary: row.excerpt || '',
       date: row.date_published?.slice(0, 10) || '',
-      image: directusAsset(fileId(row.image)) || '/features-automation.png',
+      image: directusAsset(fileId(row.image), DIRECTUS_IMAGE_PRESETS.content) || '/features-automation.png',
+      thumbnailImage: directusAsset(fileId(row.image), DIRECTUS_IMAGE_PRESETS.thumbnail) || '/features-automation.png',
       contentHtml: sanitizeRichTextHtml(row.content),
     }]
   })
@@ -286,10 +289,12 @@ async function readBanners(): Promise<Banner[]> {
     limit: '-1',
   }))
   return rows.flatMap((row) => {
-    const image = directusAsset(fileId(row.image))
+    const imageId = fileId(row.image)
+    const image = directusAsset(imageId, DIRECTUS_IMAGE_PRESETS.banner)
     return image ? [{
       id: String(row.id),
       image,
+      mobileImage: directusAsset(imageId, DIRECTUS_IMAGE_PRESETS.bannerMobile),
       alt: text(row.factory_alt_text, '产业资源对接平台横幅'),
     }] : []
   })
@@ -344,13 +349,13 @@ async function readSiteConfig(): Promise<SiteConfig> {
 
   const defaults = DEFAULT_SITE_CONFIG
   const translation: SiteCopyFields = row
-  const logo = directusAsset(fileId(row.logo)) || defaults.logo
+  const logo = directusAsset(fileId(row.logo), DIRECTUS_IMAGE_PRESETS.thumbnail) || defaults.logo
   const features = siteFeatures(translation.factory_home_features)
   return {
     name: text(translation.site_name, text(row.site_title, defaults.name)),
     showName: row.site_name_display_enabled ?? defaults.showName,
     logo,
-    footerLogo: directusAsset(fileId(row.footer_logo)) || logo,
+    footerLogo: directusAsset(fileId(row.footer_logo), DIRECTUS_IMAGE_PRESETS.thumbnail) || logo,
     favicon: directusAsset(fileId(row.favicon)),
     navigation: siteLinks(row.header_navigation_links, defaults.navigation),
     quickLinks: siteLinks(row.quick_links, defaults.quickLinks),
@@ -361,7 +366,7 @@ async function readSiteConfig(): Promise<SiteConfig> {
     email: text(row.email, defaults.email),
     address: text(translation.company_address, defaults.address),
     contactQr: directusAsset(fileId(row.factory_contact_qr)) || defaults.contactQr,
-    contactBanner: directusAsset(fileId(row.factory_contact_banner)) || defaults.contactBanner,
+    contactBanner: directusAsset(fileId(row.factory_contact_banner), DIRECTUS_IMAGE_PRESETS.banner) || defaults.contactBanner,
     contactEyebrow: text(translation.factory_contact_eyebrow, defaults.contactEyebrow),
     contactTitle: text(translation.factory_contact_title, defaults.contactTitle),
     contactDescription: text(translation.factory_contact_description, defaults.contactDescription),

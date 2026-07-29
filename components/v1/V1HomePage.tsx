@@ -68,7 +68,7 @@ export async function V1HomePage() {
           <div className="mt-6 grid gap-5 md:grid-cols-3">
             {homeNews.map((item) => (
               <Link key={item.id} href={`/news/${item.id}`} className="overflow-hidden rounded-lg border border-border/40 bg-white shadow-sm transition hover:border-primary hover:shadow-xl hover:shadow-primary/10">
-                <img src={item.image} alt="" className="h-44 w-full object-cover" />
+                <img src={item.thumbnailImage} alt="" loading="lazy" className="h-44 w-full object-cover" />
                 <div className="p-5">
                   <div className="flex items-center gap-2 text-xs text-muted-foreground"><CalendarDays className="size-4 text-primary" />{item.date}</div>
                   <h3 className="mt-3 line-clamp-2 text-lg font-bold hover:text-primary">{item.title}</h3>

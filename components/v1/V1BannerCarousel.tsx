@@ -23,12 +23,16 @@ export function V1BannerCarousel({ slides }: { slides: Banner[] }) {
     <section className="group relative overflow-hidden bg-card" aria-label="首页横幅">
       <div className="relative h-[280px] w-full overflow-hidden">
         {slides.map((slide, index) => (
-          <img
-            key={slide.id}
-            src={slide.image}
-            alt={slide.alt}
-            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${index === activeIndex ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
-          />
+          <picture key={slide.id}>
+            <source media="(max-width: 800px)" srcSet={slide.mobileImage} />
+            <img
+              src={slide.image}
+              alt={slide.alt}
+              loading={index === 0 ? 'eager' : 'lazy'}
+              fetchPriority={index === 0 ? 'high' : 'auto'}
+              className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${index === activeIndex ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
+            />
+          </picture>
         ))}
       </div>
 

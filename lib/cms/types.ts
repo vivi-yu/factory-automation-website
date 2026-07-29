@@ -20,6 +20,7 @@ export type Company = {
   introHtml: string
   businessTags: string[]
   serviceScope: string[]
+  thumbnailImage?: string
   images: string[]
   website?: string
   province: string
@@ -47,12 +48,14 @@ export type News = {
   summary: string
   date: string
   image: string
+  thumbnailImage: string
   contentHtml: string
 }
 
 export type Banner = {
   id: string
   image: string
+  mobileImage: string
   alt: string
 }
 

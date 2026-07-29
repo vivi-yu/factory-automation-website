@@ -19,10 +19,10 @@ export const developmentFixtures: CmsData = {
     { id: 'demo-demand', companyId: 'demo-integrator', title: '自动化项目合作需求示例', type: '项目合作', content: '这是本地开发占位内容。配置 Directus 后将显示后台发布的真实需求。', contentHtml: '<p>这是本地开发占位内容。配置 Directus 后将显示后台发布的真实需求。</p>', publishedAt: '2026-07-01', sort: 1, status: 'active' },
   ],
   news: [
-    { id: 'demo-news', title: '产业资讯内容示例', summary: '配置 Directus 后，后台发布的中文文章会显示在这里。', date: '2026-07-01', image: '/features-automation.png', contentHtml: '<p>这是仅用于本地开发的占位文章。</p>' },
+    { id: 'demo-news', title: '产业资讯内容示例', summary: '配置 Directus 后，后台发布的中文文章会显示在这里。', date: '2026-07-01', image: '/features-automation.png', thumbnailImage: '/features-automation.png', contentHtml: '<p>这是仅用于本地开发的占位文章。</p>' },
   ],
   banners: [
-    { id: 'demo-banner-1', image: '/hero-banner-1.png', alt: '产业资源对接平台横幅' },
-    { id: 'demo-banner-2', image: '/hero-banner-2.png', alt: '工厂自动化资源平台横幅' },
+    { id: 'demo-banner-1', image: '/hero-banner-1.png', mobileImage: '/hero-banner-1.png', alt: '产业资源对接平台横幅' },
+    { id: 'demo-banner-2', image: '/hero-banner-2.png', mobileImage: '/hero-banner-2.png', alt: '工厂自动化资源平台横幅' },
   ],
 }

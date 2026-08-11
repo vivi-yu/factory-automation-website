@@ -23,6 +23,7 @@ export const DEFAULT_SITE_CONFIG: SiteConfig = {
   footerDescription: '汇聚产业链优质企业资源，快速寻找合作伙伴、供应商、技术服务与人才资源，让产业对接更高效。',
   phone: '18915532743',
   email: '18915532743@163.com',
+  icpNumber: '苏ICP备2025205436号',
   address: '苏州园区汀兰巷192号 沙湖天地 A1-205B-11',
   contactQr: '/wecom-qrcode.jpg',
   contactBanner: '/contact-banner.png',

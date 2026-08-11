@@ -40,6 +40,13 @@ export function V1Footer({ categories = [] }: { categories?: Category[] }) {
           <Link href="/contact" className="mt-5 inline-block"><Button className="h-9 gap-2 rounded-lg text-white hover:opacity-90" style={{ background: 'var(--v1-button-bg)' }}><Headphones className="size-4" />{site.contactButtonText}</Button></Link>
         </div>
       </div>
+      {site.icpNumber ? (
+        <div className="mx-auto max-w-7xl border-t border-current/15 px-4 py-5 text-center text-xs text-current/60 md:px-6">
+          <a href="https://beian.miit.gov.cn/" target="_blank" rel="noreferrer" className="v1-footer-link">
+            {site.icpNumber}
+          </a>
+        </div>
+      ) : null}
       <style jsx>{`.v1-footer-link:hover { color: var(--v1-footer-link); }`}</style>
     </footer>
   )

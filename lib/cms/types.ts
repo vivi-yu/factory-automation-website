@@ -114,6 +114,7 @@ export type SiteConfig = {
   footerDescription: string
   phone: string
   email: string
+  icpNumber: string
   address: string
   contactQr: string
   contactBanner: string

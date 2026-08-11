@@ -125,6 +125,7 @@ type SiteRow = SiteCopyFields & {
   footer_link_color?: string
   email?: string
   phone?: string
+  icp_number?: string
   quick_links?: unknown
   factory_contact_qr?: FileRelation
   factory_contact_banner?: FileRelation
@@ -328,7 +329,7 @@ async function readSiteConfig(): Promise<SiteConfig> {
       'factory_theme_bg_panel', 'factory_theme_bg_accent', 'font_family',
       'header_background_color', 'header_background_opacity', 'header_text_color',
       'header_hover_text_color', 'quote_button_enabled', 'header_navigation_links',
-      'footer_background_color', 'footer_text_color', 'footer_link_color', 'email', 'phone',
+      'footer_background_color', 'footer_text_color', 'footer_link_color', 'email', 'phone', 'icp_number',
       'quick_links', 'factory_contact_qr', 'factory_contact_banner',
       'site_name', 'company_address', 'quote_button_text', 'default_meta_title',
       'default_meta_keywords', 'default_meta_description', 'factory_footer_description',
@@ -364,6 +365,7 @@ async function readSiteConfig(): Promise<SiteConfig> {
     footerDescription: text(translation.factory_footer_description, defaults.footerDescription),
     phone: text(row.phone, defaults.phone),
     email: text(row.email, defaults.email),
+    icpNumber: text(row.icp_number, ''),
     address: text(translation.company_address, defaults.address),
     contactQr: directusAsset(fileId(row.factory_contact_qr)) || defaults.contactQr,
     contactBanner: directusAsset(fileId(row.factory_contact_banner), DIRECTUS_IMAGE_PRESETS.banner) || defaults.contactBanner,
